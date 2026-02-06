@@ -5,45 +5,70 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
-        /*
-        2 usuario
-            -ADMIN
-            -CLIENTE
-        */
-
         //Variables
-        String[] nombresUsuarios = new String[3];
-        String[] emailsUsuarios = new String[3];
-        String[] contraseniasUsuarios = new String[3];
-        String[] rolesUsuarios = new String[3];
-        String[] nombreProductos = new String[3];
-        String[] coloresProductos = new String[3];
-        String[] marcasProductos = new String[3];
-        String[] tallasProductos = new String[3];
-        int[] stocksProductos = new int[3];
-        int[] codigoProductos = new int[3];
-        double[] precioProductos = new double[3];
-
+        int u = 3, p = 100, pv = 100, mp = 4, pm = 2;
         Scanner sc = new Scanner(System.in);
+        String[] nombresUsuarios = new String[u];
+        String[] emailsUsuarios = new String[u];
+        String[] contraseniasUsuarios = new String[u];
+        String[] rolesUsuarios = new String[u];
+        String[] nombreProductos = new String[u];
+        String[] coloresProductos = new String[u];
+        String[] marcasProductos = new String[u];
+        String[] tallasProductos = new String[u];
+        String[] nombresCliente = new String[u];
+        String[] productosComprados = new String[p];
+        String[] categorias = new String[p];
+        String[] descripciones = new String[p];
+        String[] estados = new String[p];
+        String[] fechas = new String[p];
+        String[] nombres = new String[pv];
+        String[] telefonos = new String[pv];
+        String[] correos = new String[pv];
+        String[] productos = new String[pv];
+        String[] clientes = new String[pv];
+        String[] metodosPago = new String[mp];
+        String[] promociones = new String[pm];
+        int[] stocksProductos = new int[u];
+        int[] codigoProductos = new int[u];
+        int[] idsPedido = new int[p];
+        int[] cantidades = new int[pv];
+        int[] idsProveedores = new int[pv];
+        int[] idsVentas = new int[pv];
+        double[] precioProductos = new double[u];
+        double[] totales = new double[pv];
         int tipoUsuario = 0, admin = 0, adminClientes = 0, actualizarCliente = 0, adminProductos = 0,
                 actualizarProducto = 0, codigoProducto = 0, stockProducto = 0, cliente = 0, perfilCliente = 0,
-                productosCliente = 0;
+                productosCliente = 0, totalCategorias = 0, totalPedidos = 0, contadorId = 1, idCancelar = 0,
+                idBuscado = 0, idActualizar = 0, idEliminar = 0, totalProveedores = 0, opcion = 0, buscar = 0,
+                borrar = 0, totalVentas = 0, totalMetodos = 0, totalPromos = 0,
+                pos = 0;
         double precioProducto = 0;
         String email = "", contrasenia = "", seguir = "", nombre = "", nombreProducto = "", marca = "",
-            colorProducto = "", tallaProducto = "";
-        boolean clientesregistrados = false, correoExistente = true, verificarUsuario = false, maximoUsuario = true;
-        nombresUsuarios[0] = "1";
-        emailsUsuarios[0] = "1";
-        contraseniasUsuarios[0] = "1";
+            colorProducto = "", tallaProducto = "", estadoFiltro = "", nombreBuscar = "";
+        boolean clientesregistrados = false, correoExistente = true, verificarUsuario = false, maximoUsuario = true,
+                hayPedidos = false, encontrado = false, existe = false, borrado = false, eliminado = false;
+        char estadoOpcion = 0, confirmacion = 0, estadoBuscar = 0, opcionPedido = 0, opcionCategoria = 0;
+        nombresUsuarios[0] = "Andres";
+        emailsUsuarios[0] = "andres@gmail.com";
+        contraseniasUsuarios[0] = "123";
         rolesUsuarios[0] = "admin";
-        nombresUsuarios[1] = "2";
-        emailsUsuarios[1] = "2";
-        contraseniasUsuarios[1] = "2";
-        rolesUsuarios[1] = "cliente";
-        nombresUsuarios[2] = "3";
-        emailsUsuarios[2] = "3";
-        contraseniasUsuarios[2] = "3";
-        rolesUsuarios[2] = "cliente";
+        nombresUsuarios[1] = "Daniel";
+        emailsUsuarios[1] = "daniel@gmail.com";
+        contraseniasUsuarios[1] = "123";
+        rolesUsuarios[1] = "admin";
+        nombresUsuarios[2] = "Alejandro";
+        emailsUsuarios[2] = "alejandro@gmail.com";
+        contraseniasUsuarios[2] = "123";
+        rolesUsuarios[2] = "admin";
+        nombresUsuarios[2] = "Jose";
+        emailsUsuarios[2] = "jose@gmail.com";
+        contraseniasUsuarios[2] = "123";
+        rolesUsuarios[2] = "admin";
+        nombresUsuarios[3] = "Alexander";
+        emailsUsuarios[3] = "profe@gmail.com";
+        contraseniasUsuarios[3] = "123";
+        rolesUsuarios[3] = "cliente";
 
         System.out.println("Bienvenido a The Richn´t");
 
@@ -54,7 +79,7 @@ public class Main {
                     ============================
                     |   1) Admin               |
                     |   2) Cliente             |
-                    |   3) Salir del sistema   |
+                    |   0) Salir del sistema   |
                     ============================
                     """);
             tipoUsuario = sc.nextInt();
@@ -73,13 +98,18 @@ public class Main {
                                     do {
                                         System.out.println("\nBienvenido de nuevo " + nombresUsuarios[i]);
                                         System.out.println("""
-                                                ==================================
-                                                |          MENÚ ADMIN            |
-                                                ==================================
-                                                |    1) Administrar Clientes     |
-                                                |    2) Administrar Productos    |
-                                                |    3) Cerrar Sesión            |
-                                                ==================================
+                                                =================================================
+                                                |                  MENÚ ADMIN                   |
+                                                =================================================
+                                                |    1) Administrar Clientes                    |
+                                                |    2) Administrar Productos                   |
+                                                |    3) Administrar Pedidos                     |
+                                                |    4) Administrar Categorias                  |
+                                                |    6) Administrar Proveedores                 |
+                                                |    7) Administrar Metodos de Pago             |
+                                                |    8) Administrar Promociones/Descuentos      |
+                                                |    0) Cerrar Sesión                           |
+                                                =================================================
                                                 """);
                                         admin = sc.nextInt();
 
@@ -93,8 +123,8 @@ public class Main {
                                                             |    1) Crear nuevo usuario                    |
                                                             |    2) Buscar usuario                         |
                                                             |    3) Mostrar datos de todos los usuarios    |
-                                                            |    4) Actualizar usuarios                     |
-                                                            |    5) Eliminar usuarios                       |
+                                                            |    4) Actualizar usuarios                    |
+                                                            |    5) Eliminar usuarios                      |
                                                             |    6) Atras                                  |
                                                             ================================================
                                                             """);
@@ -209,11 +239,11 @@ public class Main {
                                                                     System.out.println("\nNombre: " + nombresUsuarios[j] +
                                                                             "\nCorreo Electrónico: " + emailsUsuarios[j] +
                                                                             "\nContraseña: " + contraseniasUsuarios[j] +
-                                                                            "\nRol: " + rolesUsuarios[j] + "\n");
+                                                                            "\nRol: " + rolesUsuarios[j]);
                                                                 }
                                                             }
                                                             if (!clientesregistrados) {
-                                                                System.out.println("No hay usuarios registrados.");
+                                                                System.out.println("Señor admin, no hay usuarios registrados.");
                                                             }
                                                             clientesregistrados = false;
                                                         break;
@@ -225,7 +255,7 @@ public class Main {
                                                                 }
                                                             }
                                                             if (!clientesregistrados) {
-                                                                System.out.println("No hay usuarios registrados.");
+                                                                System.out.println("Señor admin, no hay usuarios registrados.");
                                                                 break;
                                                             }
                                                             clientesregistrados = false;
@@ -236,14 +266,15 @@ public class Main {
                                                                 if (email.equalsIgnoreCase(emailsUsuarios[j])) {
                                                                     do {
                                                                         System.out.println("""
-                                                                                =============================
-                                                                                |    ACTUALIZAR USUARIOS    |
-                                                                                =============================
-                                                                                |   1) Nombre               |
-                                                                                |   2) Correo Electrónico   |
-                                                                                |   3) Contraseña           |
-                                                                                |   4) Atras                |
-                                                                                =============================
+                                                                                ===================================
+                                                                                |       ACTUALIZAR USUARIOS       |
+                                                                                ===================================
+                                                                                |   1) Nombre                     |
+                                                                                |   2) Correo Electrónico         |
+                                                                                |   3) Contraseña                 |
+                                                                                |   4) Actualizar otro usuario    |
+                                                                                |   5) Atras                      |
+                                                                                ===================================
                                                                                 """);
                                                                         actualizarCliente = sc.nextInt();
                                                                         sc.nextLine();
@@ -273,13 +304,17 @@ public class Main {
                                                                                 System.out.println("La contraseña fue actualizado correctamente a: " + contraseniasUsuarios[j]);
                                                                                 break;
                                                                             case 4:
+                                                                                System.out.println("Ingrese el correo del usuario que deseea actualizar");
+                                                                                email = sc.nextLine();
+                                                                                break;
+                                                                            case 5:
                                                                                 System.out.println("Saliendo del menú actualizar usuarios");
                                                                             break;
                                                                             default:
                                                                                 System.out.println("Señor admin, la opcion es invalida, vuelva a ingresarla");
                                                                             break;
                                                                         }
-                                                                    } while (actualizarCliente != 4);
+                                                                    } while (actualizarCliente != 5);
                                                                 } else {
                                                                     if (j == (emailsUsuarios.length - 1)) {
                                                                         System.out.println("El usuario con el correo " + email +
@@ -297,7 +332,7 @@ public class Main {
                                                                 }
                                                             }
                                                             if (!clientesregistrados) {
-                                                                System.out.println("No hay usuarios registrados.");
+                                                                System.out.println("Señor admin, no hay usuarios registrados.");
                                                                 break;
                                                             }
                                                             clientesregistrados = false;
@@ -320,13 +355,20 @@ public class Main {
                                                                         }
                                                                     }
                                                                 }
-                                                                System.out.println("Señor admin, desea eliminar otro cliente (s/n)");
-                                                                seguir = sc.nextLine();
-
-                                                                while (!seguir.equals("s") && !seguir.equals("n")) {
-                                                                    System.out.println("La opción elegida es invalida, vuelva a ingresarla");
-                                                                    System.out.println("Señor admin, desea eliminar otro cliente (s/n)");
-                                                                    seguir = sc.nextLine();
+                                                                for (int j = 0; j < emailsUsuarios.length; j++) {
+                                                                    if (emailsUsuarios[j] != null) {
+                                                                        System.out.println("Señor admin, desea eliminar otro cliente (s/n)");
+                                                                        seguir = sc.nextLine();
+                                                                        while (!seguir.equals("s") && !seguir.equals("n")) {
+                                                                            System.out.println("La opción elegida es invalida, vuelva a ingresarla");
+                                                                            System.out.println("Señor admin, desea eliminar otro cliente (s/n)");
+                                                                            seguir = sc.nextLine();
+                                                                        }
+                                                                    }
+                                                                    if (j == (emailsUsuarios.length - 1)) {
+                                                                        System.out.println("Señor admin, no hay usuarios registrados");
+                                                                        seguir = "n";
+                                                                    }
                                                                 }
                                                             }
                                                             seguir = "s";
@@ -431,7 +473,7 @@ public class Main {
                                                                 }
                                                             }
                                                             if (!clientesregistrados) {
-                                                                System.out.println("No hay productos registrados en el inventario.");
+                                                                System.out.println("Señor admin, no hay productos registrados en el inventario.");
                                                             }
                                                             clientesregistrados = false;
                                                             break;
@@ -443,7 +485,7 @@ public class Main {
                                                                 }
                                                             }
                                                             if (!clientesregistrados) {
-                                                                System.out.println("No hay productos registrados en el inventario.");
+                                                                System.out.println("Señor admin, no hay productos registrados en el inventario.");
                                                                 break;
                                                             }
                                                             clientesregistrados = false;
@@ -551,7 +593,7 @@ public class Main {
                                                                 }
                                                             }
                                                             if (!clientesregistrados) {
-                                                                System.out.println("No hay productos registrados en el inventario.");
+                                                                System.out.println("Señor admin, no hay productos registrados en el inventario.");
                                                                 break;
                                                             }
                                                             clientesregistrados = false;
@@ -593,13 +635,708 @@ public class Main {
                                                 }while(adminProductos != 6);
                                             break;
                                             case 3:
+                                                do {
+                                                    System.out.println("""
+                                                                    ==========================================
+                                                                    |           GESTIÓN DE PEDIDOS           |
+                                                                    ==========================================
+                                                                    |    1) Crear pedido                     |
+                                                                    |    2) Ver todos los pedidos            |
+                                                                    |    3) Actualizar estado del pedido     |
+                                                                    |    4) Cancelar pedido                  |
+                                                                    |    5) Buscar pedido por ID             |
+                                                                    |    6) Ver pedidos por estado           |
+                                                                    |    0) Volver al menú principal         |
+                                                                    ==========================================
+                                                                    """);
+                                                    opcionPedido = sc.next().charAt(0);
+                                                    sc.nextLine();
+
+                                                    if (opcionPedido == '1') {
+                                                        if (totalPedidos < idsPedido.length) {
+                                                            idsPedido[totalPedidos] = contadorId;
+                                                            System.out.print("Nombre del cliente: ");
+                                                            nombresCliente[totalPedidos] = sc.nextLine();
+                                                            System.out.print("Producto: ");
+                                                            productosComprados[totalPedidos] = sc.nextLine();
+                                                            System.out.print("Cantidad: ");
+                                                            cantidades[totalPedidos] = sc.nextInt();
+                                                            System.out.print("Total a pagar: ");
+                                                            totales[totalPedidos] = sc.nextDouble();
+                                                            sc.nextLine();
+                                                            System.out.print("Fecha del pedido (DD/MM/AAAA): ");
+                                                            fechas[totalPedidos] = sc.nextLine();
+                                                            estados[totalPedidos] = "Pendiente";
+
+                                                            System.out.println("\nPedido creado exitosamente con ID: " + contadorId);
+                                                            contadorId++;
+                                                            totalPedidos++;
+                                                        } else {
+                                                            System.out.println("No hay espacio para más pedidos");
+                                                        }
+
+                                                    } else if (opcionPedido == '2') {
+                                                        if (totalPedidos == 0) {
+                                                            System.out.println("No hay pedidos registrados");
+                                                        } else {
+                                                            System.out.println("\n========== LISTADO DE PEDIDOS ==========");
+                                                            for (int j = 0; j < totalPedidos; j++) {
+                                                                System.out.println("ID Pedido: " + idsPedido[j]);
+                                                                System.out.println("Cliente: " + nombresCliente[j]);
+                                                                System.out.println("Producto: " + productosComprados[j]);
+                                                                System.out.println("Cantidad: " + cantidades[j]);
+                                                                System.out.println("Total: $" + totales[j]);
+                                                                System.out.println("Fecha: " + fechas[j]);
+                                                                System.out.println("Estado: " + estados[j]);
+                                                                System.out.println("----------------------------------------");
+                                                            }
+                                                        }
+
+                                                    } else if (opcionPedido == '3') {
+                                                        System.out.print("Ingrese el ID del pedido: ");
+                                                        idBuscado = sc.nextInt();
+                                                        sc.nextLine();
+                                                        encontrado = false;
+
+                                                        for (int j = 0; j < totalPedidos; j++) {
+                                                            if (idsPedido[j] == idBuscado) {
+                                                                System.out.println("Estado actual: " + estados[j]);
+                                                                System.out.println("""
+                                                                        ==============================
+                                                                        |  SELECCIONAR NUEVO ESTADO  |
+                                                                        ==============================
+                                                                        |       1) Pendiente         |
+                                                                        |       2) Procesando        |
+                                                                        |       3) Enviado           |
+                                                                        |       4) Entregado         |
+                                                                        ==============================
+                                                                        """);
+                                                                estadoOpcion = sc.next().charAt(0);
+                                                                sc.nextLine();
+
+                                                                if (estadoOpcion == '1') {
+                                                                    estados[j] = "Pendiente";
+                                                                } else if (estadoOpcion == '2') {
+                                                                    estados[j] = "Procesando";
+                                                                } else if (estadoOpcion == '3') {
+                                                                    estados[j] = "Enviado";
+                                                                } else if (estadoOpcion == '4') {
+                                                                    estados[j] = "Entregado";
+                                                                } else {
+                                                                    System.out.println("Opción inválida");
+                                                                    encontrado = true;
+                                                                    break;
+                                                                }
+
+                                                                System.out.println("Estado actualizado exitosamente");
+                                                                encontrado = true;
+                                                                break;
+                                                            }
+                                                        }
+
+                                                        if (!encontrado) {
+                                                            System.out.println("Pedido no encontrado");
+                                                        }
+
+                                                    } else if (opcionPedido == '4') {
+                                                        System.out.print("Ingrese el ID del pedido a cancelar: ");
+                                                        idCancelar = sc.nextInt();
+                                                        sc.nextLine();
+
+                                                        for (int j = 0; j < totalPedidos; j++) {
+                                                            if (idsPedido[j] == idCancelar) {
+                                                                System.out.println("Pedido de " + nombresCliente[j]);
+                                                                System.out.print("¿Confirma la cancelación? (s/n): ");
+                                                                confirmacion = sc.next().charAt(0);
+                                                                sc.nextLine();
+
+                                                                if (confirmacion == 's' || confirmacion == 'S') {
+                                                                    for (int k = i; k < totalPedidos - 1; k++) {
+                                                                        idsPedido[k] = idsPedido[k + 1];
+                                                                        nombresCliente[k] = nombresCliente[k + 1];
+                                                                        productosComprados[k] = productosComprados[k + 1];
+                                                                        cantidades[k] = cantidades[k + 1];
+                                                                        totales[k] = totales[k + 1];
+                                                                        estados[k] = estados[k + 1];
+                                                                        fechas[k] = fechas[k + 1];
+                                                                    }
+                                                                    totalPedidos--;
+                                                                    System.out.println("Pedido cancelado exitosamente");
+                                                                } else {
+                                                                    System.out.println("Cancelación abortada");
+                                                                }
+                                                                encontrado = true;
+                                                                break;
+                                                            }
+                                                        }
+
+                                                        if (!encontrado) {
+                                                            System.out.println("Pedido no encontrado");
+                                                        }
+
+                                                    } else if (opcionPedido == '5') {
+                                                        System.out.print("Ingrese el ID del pedido: ");
+                                                        idBuscado = sc.nextInt();
+                                                        sc.nextLine();
+                                                        encontrado = false;
+
+                                                        for (int j = 0; j < totalPedidos; j++) {
+                                                            if (idsPedido[j] == idBuscado) {
+                                                                System.out.println("\n========== DETALLE DEL PEDIDO ==========");
+                                                                System.out.println("ID Pedido: " + idsPedido[j]);
+                                                                System.out.println("Cliente: " + nombresCliente[j]);
+                                                                System.out.println("Producto: " + productosComprados[j]);
+                                                                System.out.println("Cantidad: " + cantidades[j]);
+                                                                System.out.println("Total: $" + totales[j]);
+                                                                System.out.println("Fecha: " + fechas[j]);
+                                                                System.out.println("Estado: " + estados[j]);
+                                                                encontrado = true;
+                                                                break;
+                                                            }
+                                                        }
+
+                                                        if (!encontrado) {
+                                                            System.out.println("Pedido no encontrado");
+                                                        }
+
+                                                    } else if (opcionPedido == '6') {
+                                                        System.out.println("""
+                                                                =======================
+                                                                |  SELECCIONE ESTADO  |
+                                                                =======================
+                                                                |    1) Pendiente     |
+                                                                |    2) Procesando    |
+                                                                |    3) Enviado       |
+                                                                |    4) Entregado     |
+                                                                =======================
+                                                                """);
+                                                        estadoBuscar = sc.next().charAt(0);
+                                                        sc.nextLine();
+
+                                                        if (estadoBuscar == '1') {
+                                                            estadoFiltro = "Pendiente";
+                                                        } else if (estadoBuscar == '2') {
+                                                            estadoFiltro = "Procesando";
+                                                        } else if (estadoBuscar == '3') {
+                                                            estadoFiltro = "Enviado";
+                                                        } else if (estadoBuscar == '4') {
+                                                            estadoFiltro = "Entregado";
+                                                        } else {
+                                                            System.out.println("Opción inválida");
+                                                            estadoFiltro = null;
+                                                        }
+
+                                                        if (estadoFiltro != null) {
+                                                            System.out.println("\n========== PEDIDOS " + estadoFiltro.toUpperCase() + " ==========");
+
+                                                            for (int j = 0; j < totalPedidos; j++) {
+                                                                if (estados[j].equals(estadoFiltro)) {
+                                                                    System.out.println("ID: " + idsPedido[j] + " - Cliente: " + nombresCliente[j] + " - Total: $" + totales[j]);
+                                                                    hayPedidos = true;
+                                                                }
+                                                            }
+
+                                                            if (!hayPedidos) {
+                                                                System.out.println("No hay pedidos con estado " + estadoFiltro);
+                                                            }
+                                                        }
+                                                        hayPedidos = false;
+
+                                                    } else if (opcionPedido == '0') {
+                                                        System.out.println("Volviendo al menú principal...");
+                                                    } else {
+                                                        System.out.println("Opción inválida");
+                                                    }
+
+                                                } while (opcionPedido != '0');
+                                                break;
+                                            case 4:
+                                                do {
+                                                    System.out.println("""
+                                                            ==================================
+                                                            |      GESTIÓN DE CATEGORÍAS      |
+                                                            ==================================
+                                                            |    1) Crear categoría           |
+                                                            |    2) Ver todas las categorías  |
+                                                            |    3) Actualizar categoría      |
+                                                            |    4) Eliminar categoría        |
+                                                            |    5) Buscar categoría          |
+                                                            |    0) Volver al menú principal  |
+                                                            ==================================
+                                                            """);
+                                                    System.out.print("Seleccione una opción: ");
+                                                    opcionCategoria = sc.next().charAt(0);
+                                                    sc.nextLine();
+
+                                                    if (opcionCategoria == '1') {
+                                                        if (totalCategorias < categorias.length) {
+                                                            System.out.print("Ingrese el nombre de la categoría: ");
+                                                            String nombreCategoria = sc.nextLine();
+                                                            System.out.print("Ingrese la descripción: ");
+                                                            String descripcion = sc.nextLine();
+
+                                                            categorias[totalCategorias] = nombreCategoria;
+                                                            descripciones[totalCategorias] = descripcion;
+                                                            totalCategorias++;
+
+                                                            System.out.println("Categoría creada exitosamente");
+                                                        } else {
+                                                            System.out.println("No hay espacio para más categorías");
+                                                        }
+                                                    } else if (opcionCategoria == '2') {
+                                                        if (totalCategorias == 0) {
+                                                            System.out.println("No hay categorías registradas");
+                                                        } else {
+                                                            System.out.println("\n========== LISTADO DE CATEGORÍAS ==========");
+                                                            for (int j = 0; j < totalCategorias; j++) {
+                                                                System.out.println("ID: " + j);
+                                                                System.out.println("Nombre: " + categorias[j]);
+                                                                System.out.println("Descripción: " + descripciones[j]);
+                                                                System.out.println("-------------------------------------------");
+                                                            }
+                                                        }
+
+                                                    } else if (opcionCategoria == '3') {
+                                                        System.out.print("Ingrese el ID de la categoría a actualizar: ");
+                                                        idActualizar = sc.nextInt();
+                                                        sc.nextLine();
+
+                                                        if (idActualizar >= 0 && idActualizar < totalCategorias) {
+                                                            System.out.println("Categoría actual: " + categorias[idActualizar]);
+                                                            System.out.print("Ingrese el nuevo nombre: ");
+                                                            String nuevoNombre = sc.nextLine();
+                                                            System.out.print("Ingrese la nueva descripción: ");
+                                                            String nuevaDescripcion = sc.nextLine();
+
+                                                            categorias[idActualizar] = nuevoNombre;
+                                                            descripciones[idActualizar] = nuevaDescripcion;
+
+                                                            System.out.println("Categoría actualizada exitosamente");
+                                                        } else {
+                                                            System.out.println("ID inválido");
+                                                        }
+
+                                                    } else if (opcionCategoria == '4') {
+                                                        System.out.print("Ingrese el ID de la categoría a eliminar: ");
+                                                        idEliminar = sc.nextInt();
+                                                        sc.nextLine();
+
+                                                        if (idEliminar >= 0 && idEliminar < totalCategorias) {
+                                                            System.out.println("¿Está seguro de eliminar '" + categorias[idEliminar] + "'? (s/n): ");
+                                                            confirmacion = sc.next().charAt(0);
+                                                            sc.nextLine();
+
+                                                            if (confirmacion == 's' || confirmacion == 'S') {
+                                                                for (int j = idEliminar; j < totalCategorias - 1; j++) {
+                                                                    categorias[j] = categorias[j + 1];
+                                                                    descripciones[j] = descripciones[j + 1];
+                                                                }
+                                                                totalCategorias--;
+                                                                System.out.println("Categoría eliminada exitosamente");
+                                                            } else {
+                                                                System.out.println("Eliminación cancelada");
+                                                            }
+                                                        } else {
+                                                            System.out.println("ID inválido");
+                                                        }
+
+                                                    } else if (opcionCategoria == '5') {
+                                                        System.out.print("Ingrese el nombre de la categoría a buscar: ");
+                                                        nombreBuscar = sc.nextLine();
+                                                        encontrado = false;
+
+                                                        for (int j = 0; j < totalCategorias; j++) {
+                                                            if (categorias[j].equalsIgnoreCase(nombreBuscar)) {
+                                                                System.out.println("\nCategoría encontrada:");
+                                                                System.out.println("ID: " + j);
+                                                                System.out.println("Nombre: " + categorias[j]);
+                                                                System.out.println("Descripción: " + descripciones[j]);
+                                                                encontrado = true;
+                                                                break;
+                                                            }
+                                                        }
+
+                                                        if (!encontrado) {
+                                                            System.out.println("Categoría no encontrada");
+                                                        }
+
+                                                    } else if (opcionCategoria == '0') {
+                                                        System.out.println("Volviendo al menú principal...");
+                                                    } else {
+                                                        System.out.println("Opción inválida");
+                                                    }
+
+                                                } while (opcionCategoria != '0');
+                                                break;
+                                            case 5:
+                                                do {
+                                                    System.out.println("""
+                                                            =================================
+                                                            |    ADMINISTRAR PROVEEDORES    |
+                                                            =================================
+                                                            |    1) Crear proveedor         |
+                                                            |    2) Mostrar proveedores     |
+                                                            |    3) Actualizar proveedor    |
+                                                            |    4) Eliminar proveedor      |
+                                                            |    0) Volver                  |
+                                                            =================================
+                                                            """);
+                                                    opcion = sc.nextInt();
+                                                    sc.nextLine();
+
+                                                    switch (opcion) {
+
+                                                        case 1:
+                                                            if (totalProveedores < pv) {
+
+                                                                System.out.print("ID: ");
+                                                                idsProveedores[totalProveedores] = sc.nextInt();
+                                                                sc.nextLine();
+
+                                                                System.out.print("Nombre: ");
+                                                                nombres[totalProveedores] = sc.nextLine();
+
+                                                                System.out.print("Teléfono: ");
+                                                                telefonos[totalProveedores] = sc.nextLine();
+
+                                                                System.out.print("Correo: ");
+                                                                correos[totalProveedores] = sc.nextLine();
+
+                                                                totalProveedores++;
+                                                                System.out.println("Proveedor registrado");
+
+                                                            } else {
+                                                                System.out.println("Límite alcanzado");
+                                                            }
+                                                            break;
+
+                                                        case 2:
+                                                            if (totalProveedores == 0) {
+                                                                System.out.println("No hay proveedores");
+                                                            } else {
+                                                                for (int j = 0; j < totalProveedores; j++) {
+                                                                    System.out.println(
+                                                                            "ID: " + idsProveedores[j] +
+                                                                                    " | Nombre: " + nombres[j] +
+                                                                                    " | Teléfono: " + telefonos[j] +
+                                                                                    " | Correo: " + correos[j]
+                                                                    );
+                                                                }
+                                                            }
+                                                            break;
+
+                                                        case 3:
+                                                            System.out.print("Ingrese ID: ");
+                                                            buscar = sc.nextInt();
+                                                            sc.nextLine();
+
+                                                            for (int j = 0; j < totalProveedores; j++) {
+                                                                if (idsProveedores[j] == buscar) {
+
+                                                                    System.out.print("Nuevo nombre: ");
+                                                                    nombres[j] = sc.nextLine();
+
+                                                                    System.out.print("Nuevo teléfono: ");
+                                                                    telefonos[j] = sc.nextLine();
+
+                                                                    System.out.print("Nuevo correo: ");
+                                                                    correos[j] = sc.nextLine();
+
+                                                                    System.out.println("Proveedor actualizado");
+                                                                    existe = true;
+                                                                    break;
+                                                                }
+                                                            }
+
+                                                            if (!existe) {
+                                                                System.out.println("Proveedor no encontrado");
+                                                            }
+                                                            break;
+
+                                                        case 4:
+                                                            System.out.print("Ingrese ID: ");
+                                                            borrar = sc.nextInt();
+
+                                                            for (int j = 0; j < totalProveedores; j++) {
+                                                                if (idsProveedores[j] == borrar) {
+
+                                                                    for (int k = i; k < totalProveedores - 1; k++) {
+                                                                        idsProveedores[k] = idsProveedores[k + 1];
+                                                                        nombres[k] = nombres[k + 1];
+                                                                        telefonos[k] = telefonos[k + 1];
+                                                                        correos[k] = correos[k + 1];
+                                                                    }
+
+                                                                    totalProveedores--;
+                                                                    borrado = true;
+                                                                    System.out.println("Proveedor eliminado");
+                                                                    break;
+                                                                }
+                                                            }
+
+                                                            if (!borrado) {
+                                                                System.out.println("Proveedor no encontrado");
+                                                            }
+                                                            break;
+
+                                                        case 0:
+                                                            System.out.println("Saliendo...");
+                                                            break;
+
+                                                        default:
+                                                            System.out.println("Opción inválida");
+                                                    }
+
+                                                } while (opcion != 0);
+                                                break;
+                                            case 6:
+                                                do {
+                                                    System.out.println("\n=== ADMINISTRAR VENTAS ===");
+                                                    System.out.println("1. Registrar venta");
+                                                    System.out.println("2. Ver ventas");
+                                                    System.out.println("3. Actualizar venta");
+                                                    System.out.println("4. Eliminar venta");
+                                                    System.out.println("0. Salir");
+                                                    System.out.print("Seleccione una opción: ");
+
+                                                    opcion = sc.nextInt();
+                                                    sc.nextLine();
+
+                                                    switch (opcion) {
+
+                                                        case 1:
+                                                            if (totalVentas < pv) {
+
+                                                                System.out.print("ID de la venta: ");
+                                                                idsVentas[totalVentas] = sc.nextInt();
+                                                                sc.nextLine();
+
+                                                                System.out.print("Producto: ");
+                                                                productos[totalVentas] = sc.nextLine();
+
+                                                                System.out.print("Cliente: ");
+                                                                clientes[totalVentas] = sc.nextLine();
+
+                                                                System.out.print("Cantidad: ");
+                                                                cantidades[totalVentas] = sc.nextInt();
+
+                                                                System.out.print("Total a pagar: ");
+                                                                totales[totalVentas] = sc.nextDouble();
+                                                                sc.nextLine();
+
+                                                                totalVentas++;
+                                                                System.out.println("Venta registrada correctamente");
+
+                                                            } else {
+                                                                System.out.println("No se pueden registrar más ventas");
+                                                            }
+                                                            break;
+
+                                                        case 2:
+                                                            if (totalVentas == 0) {
+                                                                System.out.println("No hay ventas registradas");
+                                                            } else {
+                                                                for (int j = 0; j < totalVentas; j++) {
+                                                                    System.out.println(
+                                                                            "ID: " + idsVentas[i] +
+                                                                                    " | Producto: " + productos[i] +
+                                                                                    " | Cliente: " + clientes[i] +
+                                                                                    " | Cantidad: " + cantidades[i] +
+                                                                                    " | Total: " + totales[i]
+                                                                    );
+                                                                }
+                                                            }
+                                                            break;
+
+                                                        case 3:
+                                                            System.out.print("Ingrese el ID de la venta: ");
+                                                            buscar = sc.nextInt();
+                                                            sc.nextLine();
+
+                                                            encontrado = false;
+
+                                                            for (int j = 0; j < totalVentas; j++) {
+                                                                if (idsVentas[i] == buscar) {
+
+                                                                    System.out.print("Nuevo producto: ");
+                                                                    productos[i] = sc.nextLine();
+
+                                                                    System.out.print("Nuevo cliente: ");
+                                                                    clientes[i] = sc.nextLine();
+
+                                                                    System.out.print("Nueva cantidad: ");
+                                                                    cantidades[i] = sc.nextInt();
+
+                                                                    System.out.print("Nuevo total: ");
+                                                                    totales[i] = sc.nextDouble();
+                                                                    sc.nextLine();
+
+                                                                    encontrado = true;
+                                                                    System.out.println("Venta actualizada");
+                                                                    break;
+                                                                }
+                                                            }
+
+                                                            if (!encontrado) {
+                                                                System.out.println("No se encontró la venta");
+                                                            }
+                                                            break;
+
+                                                        case 4:
+                                                            System.out.print("Ingrese el ID de la venta: ");
+                                                            borrar = sc.nextInt();
+
+                                                            for (int j = 0; j < totalVentas; j++) {
+                                                                if (idsVentas[j] == borrar) {
+
+                                                                    for (int k = j; k < totalVentas - 1; k++) {
+                                                                        idsVentas[k] = idsVentas[k + 1];
+                                                                        productos[k] = productos[k + 1];
+                                                                        clientes[k] = clientes[k + 1];
+                                                                        cantidades[k] = cantidades[k + 1];
+                                                                        totales[k] = totales[k + 1];
+                                                                    }
+
+                                                                    totalVentas--;
+                                                                    eliminado = true;
+                                                                    System.out.println("Venta eliminada");
+                                                                    break;
+                                                                }
+                                                            }
+
+                                                            if (!eliminado) {
+                                                                System.out.println("No se encontró la venta");
+                                                            }
+                                                            break;
+
+                                                        case 0:
+                                                            System.out.println("Saliendo del sistema...");
+                                                            break;
+
+                                                        default:
+                                                            System.out.println("Opción no válida");
+                                                    }
+
+                                                } while (opcion != 0);
+                                                break;
+                                            case 7:
+                                                do {
+                                                    System.out.println("""
+                                                            ======================================
+                                                            |      MÉTODOS DE PAGO CLIENTE       |
+                                                            ======================================
+                                                            |    1) Agregar Método de Pago       |
+                                                            |    2) Ver Métodos de Pago          |
+                                                            |    3) Actualizar Método de Pago    |
+                                                            |    4) Eliminar Método de Pago      |
+                                                            |    5) Salir                        |
+                                                            ======================================
+                                                            """);
+                                                    opcion = sc.nextInt();
+                                                    sc.nextLine();
+
+                                                    if (opcion == 1) {
+                                                        if (totalMetodos < metodosPago.length) {
+                                                            System.out.print("Ingrese metodo de pago: ");
+                                                            metodosPago[totalMetodos] = sc.nextLine();
+                                                            totalMetodos++;
+                                                        }
+                                                    }
+
+                                                    else if (opcion == 2) {
+                                                        for (int j = 0; j < totalMetodos; j++) {
+                                                            System.out.println((j + 1) + ". " + metodosPago[j]);
+                                                        }
+                                                    }
+
+                                                    else if (opcion == 3) {
+                                                        System.out.print("Numero del metodo a actualizar: ");
+                                                        pos = sc.nextInt() - 1;
+                                                        sc.nextLine();
+
+                                                        if (pos >= 0 && pos < totalMetodos) {
+                                                            System.out.print("Nuevo metodo: ");
+                                                            metodosPago[pos] = sc.nextLine();
+                                                        }
+                                                    }
+
+                                                    else if (opcion == 4) {
+                                                        System.out.print("Numero del metodo a eliminar: ");
+                                                        pos = sc.nextInt() - 1;
+
+                                                        if (pos >= 0 && pos < totalMetodos) {
+                                                            for (int j = pos; j < totalMetodos - 1; j++) {
+                                                                metodosPago[j] = metodosPago[j + 1];
+                                                            }
+                                                            totalMetodos--;
+                                                        }
+                                                    }
+
+                                                } while (opcion != 5);
+                                                break;
+                                            case 8:
+                                                do {
+                                                    System.out.println("""
+                                                            ================================
+                                                            |   PROMOCIONES / DESCUENTOS   |
+                                                            ================================
+                                                            |    1) Agregar promoción      |
+                                                            |    2) Ver promociones        |
+                                                            |    3) Eliminar promoción     |
+                                                            |    4) Salir                  |
+                                                            ================================
+                                                            """);
+
+                                                    opcion = sc.nextInt();
+                                                    sc.nextLine();
+
+                                                    if (opcion == 1) {
+                                                        if (totalPromos < promociones.length) {
+                                                            System.out.print("Ingrese promocion: ");
+                                                            promociones[totalPromos] = sc.nextLine();
+                                                            totalPromos++;
+                                                        }
+                                                    }
+
+                                                    else if (opcion == 2) {
+                                                        for (int j = 0; j < totalPromos; j++) {
+                                                            System.out.println((j + 1) + ". " + promociones[j]);
+                                                        }
+                                                    }
+
+                                                    else if (opcion == 3) {
+                                                        System.out.print("Numero de la promocion a actualizar: ");
+                                                        pos = sc.nextInt() - 1;
+                                                        sc.nextLine();
+
+                                                        if (pos >= 0 && pos < totalPromos) {
+                                                            System.out.print("Nueva promocion: ");
+                                                            promociones[pos] = sc.nextLine();
+                                                        }
+                                                    }
+
+                                                    else if (opcion == 4) {
+                                                        System.out.print("Numero de la promocion a eliminar: ");
+                                                        pos = sc.nextInt() - 1;
+
+                                                        if (pos >= 0 && pos < totalPromos) {
+                                                            for (int j = pos; j < totalPromos - 1; j++) {
+                                                                promociones[j] = promociones[j + 1];
+                                                            }
+                                                            totalPromos--;
+                                                        }
+                                                    }
+
+                                                } while (opcion != 5);
+                                                break;
+                                            case 0:
                                                 System.out.println("Sesión cerrada correctamente");
                                             break;
                                             default:
                                                 System.out.println("Opcion invalida, favor ingresela nuevamente");
                                             break;
                                         }
-                                    }while (admin != 3);
+                                    }while (admin != 0);
                                 }
                                 if (!verificarUsuario){
                                     System.out.println("El usuario ingresado no tiene permisos de administrador");
@@ -710,7 +1447,13 @@ public class Main {
                         }
                     }
                     break;
+                case 0:
+                    System.out.println("Muchas gracias por visitarnos, vuelva pronto");
+                    break;
+                default:
+                    System.out.println("Señor usuario la opcion es invalida, vuelva a ingresarla");
+                    break;
             }
-        } while(tipoUsuario != 3);
+        } while(tipoUsuario != 0);
     }
 }
