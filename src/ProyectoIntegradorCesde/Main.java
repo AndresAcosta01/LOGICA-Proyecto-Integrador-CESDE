@@ -68,14 +68,14 @@ public class Main {
         emailsUsuarios[2] = "alejandro@gmail.com";
         contraseniasUsuarios[2] = "123";
         rolesUsuarios[2] = "admin";
-        nombresUsuarios[2] = "Jose";
-        emailsUsuarios[2] = "jose@gmail.com";
-        contraseniasUsuarios[2] = "123";
-        rolesUsuarios[2] = "admin";
-        nombresUsuarios[3] = "Alexander";
-        emailsUsuarios[3] = "profe@gmail.com";
+        nombresUsuarios[3] = "Jose";
+        emailsUsuarios[3] = "jose@gmail.com";
         contraseniasUsuarios[3] = "123";
-        rolesUsuarios[3] = "cliente";
+        rolesUsuarios[3] = "admin";
+        nombresUsuarios[4] = "Alexander";
+        emailsUsuarios[4] = "profe@gmail.com";
+        contraseniasUsuarios[4] = "123";
+        rolesUsuarios[4] = "cliente";
 
         System.out.println("Bienvenido a The Richn´t");
 
@@ -112,7 +112,8 @@ public class Main {
                                                 |    2) Administrar Productos                   |
                                                 |    3) Administrar Pedidos                     |
                                                 |    4) Administrar Categorias                  |
-                                                |    6) Administrar Proveedores                 |
+                                                |    5) Administrar Proveedores                 |
+                                                |    6) Administrar Ventas                      |
                                                 |    7) Administrar Metodos de Pago             |
                                                 |    8) Administrar Promociones/Descuentos      |
                                                 |    0) Cerrar Sesión                           |
@@ -1098,12 +1099,17 @@ public class Main {
                                                 break;
                                             case 6:
                                                 do {
-                                                    System.out.println("\n=== ADMINISTRAR VENTAS ===");
-                                                    System.out.println("1. Registrar venta");
-                                                    System.out.println("2. Ver ventas");
-                                                    System.out.println("3. Actualizar venta");
-                                                    System.out.println("4. Eliminar venta");
-                                                    System.out.println("0. Salir");
+                                                    System.out.println("""
+                                                            ==================================
+                                                            |        ADMINISTRAR VENTAS      |
+                                                            ==================================
+                                                            |    1) Registrar venta         |
+                                                            |    2) Ver ventas              |
+                                                            |    3) Actualizar venta        |
+                                                            |    4) Eliminar venta          |
+                                                            |    0) Salir                   |
+                                                            ==================================
+                                                            """);
                                                     System.out.print("Seleccione una opción: ");
 
                                                     opcion = sc.nextInt();
