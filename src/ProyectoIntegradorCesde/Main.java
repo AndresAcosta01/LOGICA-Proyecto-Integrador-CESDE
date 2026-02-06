@@ -6,7 +6,7 @@ public class Main {
     public static void main(String[] args) {
 
         //Variables
-        int u = 3, p = 100, pv = 100, mp = 4, pm = 2;
+        int u = 10, p = 100, pv = 100, mp = 4, pm = 2;
         Scanner sc = new Scanner(System.in);
         String[] nombresUsuarios = new String[u];
         String[] emailsUsuarios = new String[u];
@@ -29,25 +29,32 @@ public class Main {
         String[] clientes = new String[pv];
         String[] metodosPago = new String[mp];
         String[] promociones = new String[pm];
+        String[] carritoProductos = new String[pv];
+        String[] direccionUsuarios = new String[u];
         int[] stocksProductos = new int[u];
         int[] codigoProductos = new int[u];
         int[] idsPedido = new int[p];
         int[] cantidades = new int[pv];
         int[] idsProveedores = new int[pv];
         int[] idsVentas = new int[pv];
+        int[] codigosPedidos = new int[p];
+        int[] carritoCantidades = new int[pv];
+        int[] carritoCodigos = new int[pv];
         double[] precioProductos = new double[u];
         double[] totales = new double[pv];
+        double[] preciosPedidos = new double[p];
         int tipoUsuario = 0, admin = 0, adminClientes = 0, actualizarCliente = 0, adminProductos = 0,
                 actualizarProducto = 0, codigoProducto = 0, stockProducto = 0, cliente = 0, perfilCliente = 0,
                 productosCliente = 0, totalCategorias = 0, totalPedidos = 0, contadorId = 1, idCancelar = 0,
                 idBuscado = 0, idActualizar = 0, idEliminar = 0, totalProveedores = 0, opcion = 0, buscar = 0,
-                borrar = 0, totalVentas = 0, totalMetodos = 0, totalPromos = 0,
-                pos = 0;
-        double precioProducto = 0;
+                borrar = 0, totalVentas = 0, totalMetodos = 0, totalPromos = 0, carritoCliente = 0,
+                pos = 0, clientePedidos;
+        double precioProducto = 0, totalCarrito = 0;
         String email = "", contrasenia = "", seguir = "", nombre = "", nombreProducto = "", marca = "",
             colorProducto = "", tallaProducto = "", estadoFiltro = "", nombreBuscar = "";
         boolean clientesregistrados = false, correoExistente = true, verificarUsuario = false, maximoUsuario = true,
-                hayPedidos = false, encontrado = false, existe = false, borrado = false, eliminado = false;
+                hayPedidos = false, encontrado = false, existe = false, borrado = false, eliminado = false,
+                carritoProducto = false, clientePedido = false;
         char estadoOpcion = 0, confirmacion = 0, estadoBuscar = 0, opcionPedido = 0, opcionCategoria = 0;
         nombresUsuarios[0] = "Andres";
         emailsUsuarios[0] = "andres@gmail.com";
@@ -1362,21 +1369,21 @@ public class Main {
                 break;
                 case 2:
                     while (!seguir.equals("n")) {
-                        System.out.println("Ingrese el correo:");
+                        System.out.println("Ingrese correo:");
                         email = sc.nextLine();
-                        System.out.println("Ingrese la contraseña:");
+                        System.out.println("Ingrese contraseña:");
                         contrasenia = sc.nextLine();
                         for (int i = 0; i < emailsUsuarios.length; i++) {
                             if (email.equalsIgnoreCase(emailsUsuarios[i]) && contrasenia.equals(contraseniasUsuarios[i])) {
                                 do {
-                                    System.out.println("\nBienvenido de nuevo " + nombresUsuarios[i]);
+                                    System.out.println("\nBienvenido " + nombresUsuarios[i]);
                                     System.out.println("""
                                                 ===================================
                                                 |          MENÚ CLIENTE           |
                                                 ===================================
                                                 |    1) Ver perfil                |
                                                 |    2) Ver productos             |
-                                                |    3) Ver Carrito de compras    |
+                                                |    3) Ver carrito               |
                                                 |    4) Ver pedidos               |
                                                 |    5) Cerrar Sesión             |
                                                 ===================================
@@ -1390,16 +1397,71 @@ public class Main {
                                                 ======================================
                                                 |               PERFIL               |
                                                 ======================================
-                                                |    1) Cambiar nombre               |
-                                                |    2) Cambiar correo               |
-                                                |    3) Cambiar/Agregar dirección    |
-                                                |    4) Cambiar contraseña           |
-                                                |    5) Cerrar Sesión                |
+                                                |    1) Ver datos del perfil         |
+                                                |    2) Cambiar nombre               |
+                                                |    3) Cambiar correo               |
+                                                |    4) Agregar dirección            |
+                                                |    5) Cambiar contraseña           |
+                                                |    6) Atras                        |
                                                 ======================================
                                                 """);
                                                 perfilCliente = sc.nextInt();
                                                 sc.nextLine();
-                                            }while (perfilCliente != 5);
+                                                switch (perfilCliente) {
+                                                    case 1:
+                                                        System.out.println("\nNombre: " + nombresUsuarios[i] +
+                                                                "\nCorreo: " + emailsUsuarios[i] +
+                                                                "\nDirección de residencia: " + direccionUsuarios[i]);
+                                                        break;
+                                                    case 2:
+                                                        System.out.println("\nSeñor usuario, su nombre actual es: " + nombresUsuarios[i] +
+                                                                "\nIngrese el nombre a actualizar");
+                                                        nombre = sc.nextLine();
+                                                        nombresUsuarios[i] = nombre;
+                                                        System.out.println("El nombre fue actualizado correctamente");
+                                                        break;
+                                                    case 3:
+                                                        System.out.println("\nSeñor " + nombresUsuarios[i] + " su correo actual es: " + emailsUsuarios[i] +
+                                                                "\nIngrese el correo a actualizar");
+                                                        email = sc.nextLine();
+                                                        emailsUsuarios[i] = email;
+                                                        System.out.println("El correo fue actualizado correctamente");
+                                                        break;
+                                                    case 4:
+                                                        if (direccionUsuarios[i] == null){
+                                                            System.out.println("Señor " + nombresUsuarios[i] + " actualmente no registra una dirección en el sistema" +
+                                                                    "\nDesea añadir una dirección para el envío de sus productos (s/n)");
+                                                            seguir = sc.nextLine();
+                                                            while (!seguir.equals("s") && !seguir.equals("n")) {
+                                                                System.out.println("Señor " + nombresUsuarios[i] + " la opcion es invalida, vuelva a ingresarla" +
+                                                                        "\nActualmente no registra una dirección en el sistema" +
+                                                                        "\nDesea añadir una dirección para el envío de sus productos (s/n)");
+                                                                seguir = sc.nextLine();
+                                                            }
+                                                            if (!seguir.equals("n")){
+                                                                System.out.println("Ingrese la dirección a registrar: ");
+                                                                direccionUsuarios[i] = sc.nextLine();
+                                                                System.out.println("La dirección fue registrada correctamente");
+                                                            }
+                                                        }else {
+                                                            System.out.println("Señor " + nombresUsuarios[i] + " la dirección actual es :" +
+                                                                    "\nIngrese la dirección a actualizar");
+                                                            direccionUsuarios[i] = sc.nextLine();
+                                                            System.out.println("La dirección fue agregada correctamente");
+                                                        }
+                                                        break;
+                                                    case 5:
+                                                        System.out.println("Señor " + nombresUsuarios[i] + " ingrese la nueva contraseña a actualizar:");
+                                                        contrasenia = sc.nextLine();
+                                                        contraseniasUsuarios[i] = contrasenia;
+                                                        System.out.println("La contraseña fue actualizada correctamente");
+                                                        break;
+                                                    case 6:
+                                                        break;
+                                                    default:
+                                                        System.out.println("Señor " + nombresUsuarios[i] + " la opción es inválida, vuelva a ingresarla");
+                                                }
+                                            }while (perfilCliente != 6);
                                             break;
                                         case 2:
                                             do {
@@ -1408,38 +1470,406 @@ public class Main {
                                                 |             PRODUCTOS              |
                                                 ======================================
                                                 |    1) Ver Productos                |
-                                                |    2) Añadir al carrito            |
-                                                |    3)                              |
-                                                |    4) Cambiar contraseña           |
-                                                |    5) Cerrar Sesión                |
+                                                |    2) Buscar producto              |
+                                                |    3) Comprar producto             |
+                                                |    4) Atras                        |
                                                 ======================================
                                                 """);
                                                 productosCliente = sc.nextInt();
                                                 sc.nextLine();
-                                            }while (productosCliente != 5);
+                                                switch (productosCliente) {
+                                                    case 1:
+                                                        for (int j = 0; j < codigoProductos.length; j++) {
+                                                            if (codigoProductos[j] != 0) {
+                                                                clientesregistrados = true;
+                                                                System.out.println("\nCodigo: " + codigoProductos[j] +
+                                                                        "\nNombre: " + nombreProductos[j] +
+                                                                        "\nMarca: " + marcasProductos[j] +
+                                                                        "\nColor: " + coloresProductos[j] +
+                                                                        "\nTalla: " + tallasProductos[j] +
+                                                                        "\nStock: " + stocksProductos[j] +
+                                                                        "\nPrecio: " + precioProductos[j]);
+                                                            }
+                                                        }
+                                                        if (!clientesregistrados) {
+                                                            System.out.println("Señor " + nombresUsuarios[i] + " no hay productos disponibles");
+                                                        }
+                                                        clientesregistrados = false;
+                                                        break;
+                                                    case 2:
+                                                        for (int j = 0; j < codigoProductos.length; j++) {
+                                                            if (codigoProductos[j] != 0) {
+                                                                clientesregistrados = true;
+                                                                break;
+                                                            }
+                                                        }
+                                                        if (!clientesregistrados) {
+                                                            System.out.println("Señor " + nombresUsuarios[i] + " no hay productos disponibles");
+                                                            break;
+                                                        }
+                                                        clientesregistrados = false;
+
+                                                        while (!seguir.equals("n")) {
+                                                            System.out.println("Señor " + nombresUsuarios[i] + " ingrese el codigo del producto que desea buscar:");
+                                                            codigoProducto = sc.nextInt();
+                                                            sc.nextLine();
+                                                            for (int j = 0; j < codigoProductos.length; j++) {
+                                                                if (codigoProducto == codigoProductos[j]) {
+                                                                    clientesregistrados = true;
+                                                                    System.out.println("\nCodigo: " + codigoProductos[j] +
+                                                                            "\nNombre: " + nombreProductos[j] +
+                                                                            "\nMarca: " + marcasProductos[j] +
+                                                                            "\nColor: " + coloresProductos[j] +
+                                                                            "\nTalla: " + tallasProductos[j] +
+                                                                            "\nStock: " + stocksProductos[j] +
+                                                                            "\nPrecio: " + precioProductos[j]);
+                                                                    break;
+                                                                }
+                                                            }
+                                                            if (!clientesregistrados) {
+                                                                System.out.println("Producto no encontrado");
+                                                            }
+                                                            clientesregistrados = false;
+
+                                                            System.out.println("Señor " + nombresUsuarios[i] + " desea buscar otro producto (s/n)");
+                                                            seguir = sc.nextLine();
+                                                            while (!seguir.equals("s") && !seguir.equals("n")) {
+                                                                System.out.println("Señor " + nombresUsuarios[i] + " la opción es inválida, vuelva a ingresarla");
+                                                                System.out.println("desea buscar otro producto (s/n)");
+                                                                seguir = sc.nextLine();
+                                                            }
+                                                        }
+                                                        seguir = "s";
+                                                        break;
+                                                    case 3:
+                                                        for (int j = 0; j < codigoProductos.length; j++) {
+                                                            if (codigoProductos[j] != 0) {
+                                                                clientesregistrados = true;
+                                                                break;
+                                                            }
+                                                        }
+                                                        if (!clientesregistrados) {
+                                                            System.out.println("Señor " + nombresUsuarios[i] + " no hay productos disponibles");
+                                                            break;
+                                                        }
+                                                        clientesregistrados = false;
+                                                        while (!seguir.equals("n")) {
+                                                            System.out.println("Señor " + nombresUsuarios[i] + " ingrese el codigo del producto que desea comprar:");
+                                                            codigoProducto = sc.nextInt();
+                                                            sc.nextLine();
+                                                            for (int j = 0; j < codigoProductos.length; j++) {
+                                                                if (codigoProducto == codigoProductos[j]) {
+                                                                    encontrado = true;
+                                                                    System.out.println("\nCodigo: " + codigoProductos[j] +
+                                                                            "\nNombre: " + nombreProductos[j] +
+                                                                            "\nMarca: " + marcasProductos[j] +
+                                                                            "\nColor: " + coloresProductos[j] +
+                                                                            "\nTalla: " + tallasProductos[j] +
+                                                                            "\nStock: " + stocksProductos[j] +
+                                                                            "\nPrecio: " + precioProductos[j]);
+                                                                    if (stocksProductos[j] > 0) {
+                                                                        System.out.println("Señor " + nombresUsuarios[i] + " que cantidad del producto desea comprar:");
+                                                                        stockProducto = sc.nextInt();
+                                                                        sc.nextLine();
+                                                                        if (stockProducto <= stocksProductos[j] && stockProducto > 0) {
+                                                                            for (int k = 0; k < carritoProductos.length; k++) {
+                                                                                if (carritoProductos[k] == null) {
+                                                                                    carritoProductos[k] = nombreProductos[j];
+                                                                                    carritoCodigos[k] = codigoProductos[j];
+                                                                                    carritoCantidades[k] = stockProducto;
+                                                                                    stocksProductos[j] = stocksProductos[j] - stockProducto;
+                                                                                    System.out.println("Señor " + nombresUsuarios[i] + " el producto fue agregado al carrito correctamente");
+                                                                                    break;
+                                                                                }
+                                                                            }
+                                                                        } else {
+                                                                            System.out.println("Señor " + nombresUsuarios[i] + " la cantidad a comprar es invalida" +
+                                                                                    "Asegurese de que la cantidad a comprar sea mayor a 0 y menor o igual al stock disponible");
+                                                                        }
+                                                                    } else {
+                                                                        System.out.println("Señor " + nombresUsuarios[i] + " para el producto que sedea comprar no se encuentra por el momento stock disponible");
+                                                                    }
+                                                                    break;
+                                                                }
+                                                            }
+                                                            if (!encontrado) {
+                                                                System.out.println("Señor " + nombresUsuarios[i] + " el codigo del producto ingresado no se encuentra registrado en el inventario");
+                                                            }
+                                                            encontrado = false;
+                                                            System.out.println("Desea comprar otro producto (s/n)");
+                                                            seguir = sc.nextLine();
+                                                            while (!seguir.equals("s") && !seguir.equals("n")) {
+                                                                System.out.println("Señor " + nombresUsuarios[i] + " la opción es inválida, vuelva a ingresarla");
+                                                                System.out.println("Desea comprar otro producto (s/n)");
+                                                                seguir = sc.nextLine();
+                                                            }
+                                                        }
+                                                        seguir = "s";
+                                                        break;
+                                                    case 4:
+                                                        break;
+                                                    default:
+                                                        System.out.println("Señor " + nombresUsuarios[i] + " la opción es inválida, vuelva a ingresarla");
+                                                }
+                                            }while (productosCliente != 4);
                                             break;
                                         case 3:
+                                            do {
+                                                for (int j = 0; j < carritoProductos.length; j++) {
+                                                    if (carritoProductos[j] != null) {
+                                                        carritoProducto = true;
+                                                        break;
+                                                    }
+                                                }
+                                                if (!carritoProducto) {
+                                                    System.out.println("Señor " + nombresUsuarios[i] + " el carrito está vacío");
+                                                    break;
+                                                }
+                                                System.out.println("""
+                                                ==========================================
+                                                |                CARRITO                 |
+                                                ==========================================
+                                                |    1) Ver carrito                      |
+                                                |    2) Remover producto del carrito     |
+                                                |    3) Vaciar carrito                   |
+                                                |    4) Confirmar compra                 |
+                                                |    5) Atras                            |
+                                                ==========================================
+                                                """);
+                                                carritoCliente = sc.nextInt();
+                                                sc.nextLine();
+                                                switch (carritoCliente) {
+                                                    case 1:
+                                                        for (int j = 0; j < carritoProductos.length; j++) {
+                                                            if (carritoProductos[j] != null) {
+                                                                System.out.println("\nNombre del producto: " + carritoProductos[j] +
+                                                                        "\nCodigo: " + carritoCodigos[j] +
+                                                                        "\nCantidad: " + carritoCantidades[j]);
+                                                                for (int k = 0; k < codigoProductos.length; k++) {
+                                                                    if (carritoCodigos[j] == codigoProductos[k]) {
+                                                                        System.out.println("Precio unitario: " + precioProductos[k] + "\nSubtotal: " + (precioProductos[k] * carritoCantidades[j]));
+                                                                        totalCarrito += precioProductos[k] * carritoCantidades[j];
+                                                                        break;
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                        System.out.println("\nSeñor " + nombresUsuarios[i] + " el total a pagar del carrito es: " + totalCarrito);
+                                                        totalCarrito = 0;
+                                                        break;
+                                                    case 2:
+                                                        System.out.println("Ingrese el codigo del producto que desea remover del carrito:");
+                                                        codigoProducto = sc.nextInt();
+                                                        sc.nextLine();
+                                                        for (int j = 0; j < carritoProductos.length; j++) {
+                                                            if (carritoCodigos[j] == codigoProducto) {
+                                                                encontrado = true;
+                                                                for (int k = 0; k < codigoProductos.length; k++) {
+                                                                    if (carritoCodigos[j] == codigoProductos[k]) {
+                                                                        stocksProductos[k] += carritoCantidades[j];
+                                                                        break;
+                                                                    }
+                                                                }
+                                                                carritoProductos[j] = null;
+                                                                carritoCodigos[j] = 0;
+                                                                carritoCantidades[j] = 0;
+                                                                System.out.println("Señor " + nombresUsuarios[i] + " el producto fue removido del carrito correctamente");
+                                                                break;
+                                                            }
+                                                        }
+                                                        if (!encontrado) {
+                                                            System.out.println("Señor " + nombresUsuarios[i] + " el codigo del producto no se encuentra en el carrito");
+                                                        }
+                                                        encontrado = false;
+                                                        break;
+                                                    case 3:
+                                                        for (int j = 0; j < carritoProductos.length; j++) {
+                                                            if (carritoProductos[j] != null) {
+                                                                for (int k = 0; k < codigoProductos.length; k++) {
+                                                                    if (carritoCodigos[j] == codigoProductos[k]) {
+                                                                        stocksProductos[k] += carritoCantidades[j];
+                                                                        break;
+                                                                    }
+                                                                }
+                                                                carritoProductos[j] = null;
+                                                                carritoCodigos[j] = 0;
+                                                                carritoCantidades[j] = 0;
+                                                            }
+                                                        }
+                                                        System.out.println("Carrito vaciado correctamente");
+                                                        break;
+                                                    case 4:
+                                                        for (int j = 0; j < carritoProductos.length; j++) {
+                                                            if (carritoProductos[j] != null) {
+                                                                for (int k = 0; k < codigoProductos.length; k++) {
+                                                                    if (carritoCodigos[j] == codigoProductos[k]) {
+                                                                        totalCarrito += precioProductos[k] * carritoCantidades[j];
+                                                                        break;
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                        if (totalCarrito > 0) {
+                                                            System.out.println("Señor " + nombresUsuarios[i] + " el total a pagar es: " + totalCarrito);
+                                                            System.out.println("Desea confirmar la compra (s/n)");
+                                                            seguir = sc.nextLine();
+                                                            while (!seguir.equals("s") && !seguir.equals("n")) {
+                                                                System.out.println("Señor " + nombresUsuarios[i] + " la opción es inválida, vuelva a ingresarla");
+                                                                System.out.println("Desea confirmar la compra (s/n)");
+                                                                seguir = sc.nextLine();
+                                                            }
+                                                            if (seguir.equals("s")) {
+                                                                for (int j = 0; j < carritoProductos.length; j++) {
+                                                                    if (carritoProductos[j] != null) {
+                                                                        for (int k = 0; k < idsPedido.length; k++) {
+                                                                            if (idsPedido[k] == 0) {
+                                                                                idsPedido[k] = contadorId;
+                                                                                productosComprados[k] = carritoProductos[j];
+                                                                                codigosPedidos[k] = carritoCodigos[j];
+                                                                                cantidades[k] = carritoCantidades[j];
+                                                                                estados[k] = "Pendiente";
+                                                                                contadorId++;
+                                                                                break;
+                                                                            }
+                                                                        }
+                                                                        carritoProductos[j] = null;
+                                                                        carritoCodigos[j] = 0;
+                                                                        carritoCantidades[j] = 0;
+                                                                    }
+                                                                }
+                                                                System.out.println("Señor " + nombresUsuarios[i] + " la compra fue realizada correctamente");
+                                                                seguir = "s";
+                                                            } else {
+                                                                seguir = "s";
+                                                            }
+                                                        } else {
+                                                            System.out.println("Señor " + nombresUsuarios[i] + " el carrito está vacío");
+                                                        }
+                                                        break;
+                                                    case 5:
+                                                        break;
+                                                    default:
+                                                        System.out.println("Señor " + nombresUsuarios[i] + " la opción es inválida, vuelva a ingresarla");
+                                                }
+                                            }while (carritoCliente != 5);
                                             break;
                                         case 4:
+                                            do {
+                                                for (int j = 0; j < idsPedido.length; j++) {
+                                                    if (idsPedido[j] != 0) {
+                                                        clientePedido = true;
+                                                        break;
+                                                    }
+                                                }
+                                                if (!clientePedido) {
+                                                    System.out.println("Señor " + nombresUsuarios[i] + " no hay pedidos registrados");
+                                                    break;
+                                                }
+                                                System.out.println("""
+                                                        =============================
+                                                        |          PEDIDOS          |
+                                                        =============================
+                                                        |    1) Ver pedidos         |
+                                                        |    2) Buscar pedido       |
+                                                        |    3) Cancelar pedido     |
+                                                        |    4) Atras               |
+                                                        =============================
+                                                        """);
+                                                clientePedidos = sc.nextInt();
+                                                sc.nextLine();
+                                                switch (clientePedidos) {
+                                                    case 1:
+                                                        for (int j = 0; j < idsPedido.length; j++) {
+                                                            if (idsPedido[j] != 0) {
+                                                                System.out.println("\nID del Pedido: " + idsPedido[j] +
+                                                                        "\nNombre del producto: " + productosComprados[j] +
+                                                                        "\nCantidad: " + cantidades[j] +
+                                                                        "\nEstado: " + estados[j]);
+                                                            }
+                                                        }
+                                                        break;
+                                                    case 2:
+                                                        System.out.println("Señor " + nombresUsuarios[i] + " ingrese ID del pedido que desea buscar:");
+                                                        codigoProducto = sc.nextInt();
+                                                        sc.nextLine();
+                                                        for (int j = 0; j < idsPedido.length; j++) {
+                                                            if (codigoProducto == idsPedido[j]) {
+                                                                encontrado = true;
+                                                                System.out.println("\nID del Pedido: " + idsPedido[j] +
+                                                                        "\nProducto: " + productosComprados[j] +
+                                                                        "\nCantidad: " + cantidades[j] +
+                                                                        "\nEstado: " + estados[j]);
+                                                                break;
+                                                            }
+                                                        }
+                                                        if (!encontrado) {
+                                                            System.out.println("Señor " + nombresUsuarios[i] + " el ID del pedido no se encuentra registrado en el sistema");
+                                                        }
+                                                        encontrado = false;
+                                                        break;
+                                                    case 3:
+                                                        System.out.println("Señor " + nombresUsuarios[i] + " ingrese el ID del pedido a cancelar:");
+                                                        idCancelar = sc.nextInt();
+                                                        sc.nextLine();
+                                                        for (int j = 0; j < idsPedido.length; j++) {
+                                                            if (idCancelar == idsPedido[j] && estados[j].equals("Pendiente")) {
+                                                                encontrado = true;
+                                                                System.out.println("Señor " + nombresUsuarios[i] + " confirma la cancelación del pedido (s/n)");
+                                                                seguir = sc.nextLine();
+                                                                while (!seguir.equals("s") && !seguir.equals("n")) {
+                                                                    System.out.println("Señor " + nombresUsuarios[i] + " la opción es inválida, vuelva a ingresarla");
+                                                                    System.out.println("Confirma la cancelación del pedido (s/n)");
+                                                                    seguir = sc.nextLine();
+                                                                }
+                                                                if (!seguir.equals("n")) {
+                                                                    for (int k = 0; k < codigoProductos.length; k++) {
+                                                                        if (codigosPedidos[j] == codigoProductos[k]) {
+                                                                            stocksProductos[k] += cantidades[j];
+                                                                            break;
+                                                                        }
+                                                                    }
+                                                                    idsPedido[j] = 0;
+                                                                    productosComprados[j] = null;
+                                                                    cantidades[j] = 0;
+                                                                    estados[j] = null;
+                                                                    codigosPedidos[j] = 0;
+                                                                    System.out.println("Señor " + nombresUsuarios[i] + " el pedido fue cancelado correctamente");
+                                                                } else {
+                                                                    System.out.println("Señor " + nombresUsuarios[i] + " la cancelación no fue aprobada");
+                                                                }
+                                                                break;
+                                                            } else {
+                                                                if (j == (idsPedido.length - 1) && !encontrado) {
+                                                                    System.out.println("Señor " + nombresUsuarios[i] + " el pedido no se encuentra registrado en el sistema");
+                                                                }
+                                                            }
+                                                        }
+                                                        encontrado = false;
+                                                        break;
+                                                    case 4:
+                                                        break;
+                                                    default:
+                                                        System.out.println("Señor " + nombresUsuarios[i] + " la opción es inválida, vuelva a ingresarla");
+                                                }
+                                            }while (clientePedidos != 4);
                                             break;
                                         case 5:
                                             System.out.println("Sesión cerrada correctamente");
                                             break;
                                         default:
-                                            System.out.println("Opción inválida");
-                                            break;
+                                            System.out.println("Señor " + nombresUsuarios[i] + " la opción es inválida, vuelva a ingresarla");
                                     }
                                 }while (cliente != 5);
                                 seguir = "n";
                                 break;
                             } else {
                                 if (i == (emailsUsuarios.length - 1)) {
-                                    System.out.println("Email o contraseña incorrecto");
-                                    System.out.println("Señor usuario, desea intentarlo de nuevo (s/n)");
+                                    System.out.println("Credenciales incorrectas");
+                                    System.out.println("Intentar de nuevo (s/n)");
                                     seguir = sc.nextLine();
                                     while (!seguir.equals("s") && !seguir.equals("n")) {
-                                        System.out.println("La opción elegida es invalida, vuelva a ingresarla");
-                                        System.out.println("Señor usuario, desea intentarlo de nuevo (s/n)");
+                                        System.out.println("Opción inválida");
+                                        System.out.println("Intentar de nuevo (s/n)");
                                         seguir = sc.nextLine();
                                     }
                                 }
