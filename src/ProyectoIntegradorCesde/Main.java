@@ -1391,7 +1391,7 @@ public class Main {
                                                 |    2) Ver productos             |
                                                 |    3) Ver carrito               |
                                                 |    4) Ver pedidos               |
-                                                |    5) Cerrar Sesión             |
+                                                |    0) Cerrar Sesión             |
                                                 ===================================
                                                 """);
                                     cliente = sc.nextInt();
@@ -1859,13 +1859,13 @@ public class Main {
                                                 }
                                             }while (clientePedidos != 4);
                                             break;
-                                        case 5:
+                                        case 0:
                                             System.out.println("Sesión cerrada correctamente");
                                             break;
                                         default:
                                             System.out.println("Señor " + nombresUsuarios[i] + " la opción es inválida, vuelva a ingresarla");
                                     }
-                                }while (cliente != 5);
+                                }while (cliente != 0);
                                 seguir = "n";
                                 break;
                             } else {
@@ -1882,6 +1882,7 @@ public class Main {
                             }
                         }
                     }
+                    seguir = "s";
                     break;
                 case 0:
                     System.out.println("Muchas gracias por visitarnos, vuelva pronto");
