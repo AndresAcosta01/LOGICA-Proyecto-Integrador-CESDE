@@ -6,7 +6,7 @@ public class Main {
     public static void main(String[] args) {
 
         //Variables
-        int n =100;
+        int n = 100;
         Scanner sc = new Scanner(System.in);
         String[] nombresUsuarios = new String[n];
         String[] emailsUsuarios = new String[n];
@@ -595,12 +595,12 @@ public class Main {
 
                                                                 for (int j = 0; j < emailsUsuarios.length; j++) {
                                                                     if (emailsUsuarios[j] == null) {
-                                                                        System.out.println("Señor admin, desea crear un nuevo usuario (s/n)");
+                                                                        System.out.println("Desea crear un nuevo usuario (s/n)");
                                                                         seguir = sc.nextLine();
                                                                         maximoUsuario = false;
                                                                         while (!seguir.equals("s") && !seguir.equals("n")) {
                                                                             System.out.println("La opción elegida es invalida, vuelva a ingresarla");
-                                                                            System.out.println("Señor admin, desea crear un nuevo usuario (s/n)");
+                                                                            System.out.println("Desea crear un nuevo usuario (s/n)");
                                                                             seguir = sc.nextLine();
                                                                         }
                                                                         break;
@@ -636,12 +636,12 @@ public class Main {
                                                                         }
                                                                     }
                                                                 }
-                                                                System.out.println("Señor admin, desea buscar otro usuario (s/n)");
+                                                                System.out.println("Desea buscar otro usuario (s/n)");
                                                                 seguir = sc.nextLine();
 
                                                                 while (!seguir.equals("s") && !seguir.equals("n")) {
                                                                     System.out.println("La opción elegida es invalida, vuelva a ingresarla");
-                                                                    System.out.println("Señor admin, desea buscar otro usuario (s/n)");
+                                                                    System.out.println("Desea buscar otro usuario (s/n)");
                                                                     seguir = sc.nextLine();
                                                                 }
                                                             }
@@ -1186,7 +1186,28 @@ public class Main {
                                                                                     break;
                                                                                 }
                                                                             } else {
-                                                                                seguir = "n";
+                                                                                for (int k = 0; k < codigoProductos.length; k++) {
+                                                                                    if (k != j && codigoProductos[j] == codigoProductos[k]) {
+                                                                                        productoExistente = true;
+                                                                                        System.out.println("El codigo " + codigoProductos[j] + " ya esta registrado en el sistema" +
+                                                                                                "\nDesea ingresarlo de nuevo (s/n)");
+                                                                                        seguir = sc.nextLine();
+                                                                                        while (!seguir.equals("s") && !seguir.equals("n")) {
+                                                                                            System.out.println("Opcion invalida: Asegurese de ingresar 's' o 'n' en minuscula");
+                                                                                            System.out.println("Desea ingresarlo de nuevo (s/n)");
+                                                                                            seguir = sc.nextLine();
+                                                                                        }
+                                                                                        if (!seguir.equals("s")) {
+                                                                                            codigoProductos[j] = 0;
+                                                                                            System.out.println("Se ha cancelado el proceso de registro");
+                                                                                        }
+                                                                                        break;
+                                                                                    }
+                                                                                }
+                                                                                if (!productoExistente) {
+                                                                                    seguir = "n";
+                                                                                }
+                                                                                productoExistente = false;
                                                                             }
                                                                         }
                                                                         seguir = "s";
@@ -2116,12 +2137,12 @@ public class Main {
                                                                         }
                                                                     }
                                                                 }
-                                                                System.out.println("Señor admin, desea eliminar otro producto (s/n)");
+                                                                System.out.println("Desea eliminar otro producto (s/n)");
                                                                 seguir = sc.nextLine();
 
                                                                 while (!seguir.equals("s") && !seguir.equals("n")) {
                                                                     System.out.println("La opción elegida es invalida, vuelva a ingresarla");
-                                                                    System.out.println("Señor admin, desea eliminar otro producto (s/n)");
+                                                                    System.out.println("Desea eliminar otro producto (s/n)");
                                                                     seguir = sc.nextLine();
                                                                 }
                                                             }
@@ -2430,7 +2451,7 @@ public class Main {
                                                                                         fechaPedidos[j] = null;
                                                                                     }
                                                                                 } else if (!estadoPedido.equals("pendiente") && !estadoPedido.equals("procesado") && !estadoPedido.equals("enviado") && !estadoPedido.equals("entregado")) {
-                                                                                    System.out.println("estadoPedidos invalido: Asegurese de escribir exactamente: pendiente, procesado, enviado o entregado" +
+                                                                                    System.out.println("Estado invalido: Asegurese de escribir exactamente: pendiente, procesado, enviado o entregado" +
                                                                                             "\nDesea ingresarlo de nuevo (s/n)");
                                                                                     seguir = sc.nextLine();
                                                                                     while (!seguir.equals("s") && !seguir.equals("n")) {
@@ -2555,7 +2576,7 @@ public class Main {
 
                                                                 while (!seguir.equals("s") && !seguir.equals("n")) {
                                                                     System.out.println("La opción elegida es invalida, vuelva a ingresarla");
-                                                                    System.out.println("Señor admin, desea buscar otro pedido (s/n)");
+                                                                    System.out.println("Desea buscar otro pedido (s/n)");
                                                                     seguir = sc.nextLine();
                                                                 }
                                                             }
@@ -2902,12 +2923,12 @@ public class Main {
                                                                     }
                                                                 }
                                                                 if (!clientesregistrados) {
-                                                                    System.out.println("Señor admin, desea buscar otro pedido (s/n)");
+                                                                    System.out.println("Desea buscar otro pedido (s/n)");
                                                                     seguir = sc.nextLine();
 
                                                                     while (!seguir.equals("s") && !seguir.equals("n")) {
                                                                         System.out.println("La opción elegida es invalida, vuelva a ingresarla");
-                                                                        System.out.println("Señor admin, desea buscar otro pedido (s/n)");
+                                                                        System.out.println("Desea buscar otro pedido (s/n)");
                                                                         seguir = sc.nextLine();
                                                                     }
                                                                 }
@@ -3298,11 +3319,11 @@ public class Main {
                                                                     }
                                                                 }
                                                                 if (!clientesregistrados) {
-                                                                    System.out.println("Señor admin, desea buscar otra categoria (s/n)");
+                                                                    System.out.println("Desea buscar otra categoria (s/n)");
                                                                     seguir = sc.nextLine();
                                                                     while (!seguir.equals("s") && !seguir.equals("n")) {
                                                                         System.out.println("La opción elegida es invalida, vuelva a ingresarla");
-                                                                        System.out.println("Señor admin, desea buscar otra categoria (s/n)");
+                                                                        System.out.println("Desea buscar otra categoria (s/n)");
                                                                         seguir = sc.nextLine();
                                                                     }
                                                                 }
@@ -3768,11 +3789,11 @@ public class Main {
                                                                 }
 
                                                                 if (!proveedorRegistrado) {
-                                                                    System.out.println("Señor admin, desea buscar otro proveedor (s/n)");
+                                                                    System.out.println("Desea buscar otro proveedor (s/n)");
                                                                     seguir = sc.nextLine();
                                                                     while (!seguir.equals("s") && !seguir.equals("n")) {
                                                                         System.out.println("La opción elegida es invalida, vuelva a ingresarla");
-                                                                        System.out.println("Señor admin, desea buscar otro proveedor (s/n)");
+                                                                        System.out.println("Desea buscar otro proveedor (s/n)");
                                                                         seguir = sc.nextLine();
                                                                     }
                                                                 }
@@ -5597,11 +5618,11 @@ public class Main {
                             } else {
                                 if (i == (emailsUsuarios.length - 1)) {
                                     System.out.println("Email o contraseña incorrecto");
-                                    System.out.println("Señor admin, desea intentarlo de nuevo (s/n)");
+                                    System.out.println("Desea intentarlo de nuevo (s/n)");
                                     seguir = sc.nextLine();
                                     while (!seguir.equals("s") && !seguir.equals("n")) {
                                         System.out.println("La opción elegida es invalida, vuelva a ingresarla");
-                                        System.out.println("Señor admin, desea intentarlo de nuevo (s/n)");
+                                        System.out.println("Desea intentarlo de nuevo (s/n)");
                                         seguir = sc.nextLine();
                                     }
                                 }
