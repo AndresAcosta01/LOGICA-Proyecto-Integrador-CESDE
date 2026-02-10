@@ -2889,7 +2889,7 @@ public class Main {
                                                                                                                     if (categoriaPromociones[k] == categoriaProductos[indiceProducto]) {
                                                                                                                         descuento = totalPedidos[j] * (porcentajePromociones[k] / 100.0);
                                                                                                                         totalPedidos[j] -= descuento;
-                                                                                                                        System.out.println("Promoción aplicada: -" + porcentajePromociones[k] + "%" +
+                                                                                                                        System.out.println("Promoción aplicada: " + porcentajePromociones[k] + "%" +
                                                                                                                                 "\nNuevo total: $" + totalPedidos[j]);
                                                                                                                         idPromocionesPedidos[j] = idPromociones[k];
                                                                                                                         break;
@@ -2942,7 +2942,7 @@ public class Main {
                                                                                                                 if (categoriaPromociones[k] == categoriaProductos[indiceProducto]) {
                                                                                                                     descuento = totalPedidos[j] * (porcentajePromociones[k] / 100.0);
                                                                                                                     totalPedidos[j] -= descuento;
-                                                                                                                    System.out.println("Promoción aplicada: -" + porcentajePromociones[k] + "%" +
+                                                                                                                    System.out.println("Promoción aplicada: " + porcentajePromociones[k] + "%" +
                                                                                                                             "\nNuevo total: $" + totalPedidos[j]);
                                                                                                                     idPromocionesPedidos[j] = idPromociones[k];
                                                                                                                     break;
