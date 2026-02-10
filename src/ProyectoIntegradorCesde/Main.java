@@ -35,7 +35,6 @@ public class Main {
         String[] fechaFinPromociones = new String[n];
         String[] estadoPromociones = new String[n];
         int[] idPromocionesPedidos = new int[n];
-        int[] idProductosPedidos = new int[n];
         int[] idProductos = new int[n];
         int[] idsMetodosPedidos = new int[n];
         int[] proveedorProductos = new int[n];
@@ -62,14 +61,14 @@ public class Main {
                 cantidadPedido = 0, adminPedido = 0, diferenciaCantidades = 0, cantidadAnterior = 0, opcionEstado = 0, adminCategoria = 0,
                 idCategoria = 0, actualizarCategoria = 0, adminProveedor = 0, idProveedor = 0, actualizarProveedor = 0,
                 adminDevolucion = 0, idDevolucion = 0, actualizarDevolucion = 0, adminMetodoPagos = 0, adminPromocionesDescuentos = 0,
-                idMetodoPago = 0, actualizarMetodoPago = 0, idPromocion = 0, actualizarPromocion = 0;
+                idMetodoPago = 0, actualizarMetodoPago = 0, idPromocion = 0, actualizarPromocion = 0, pedido = 0, cantidadDevuelta = 0, producto = 0;
         long numeroCuenta = 0, celularUsuario = 0, telefonoProveedor = 0;
         double precioProducto = 0, precioUnitario = 0, totalPedido = 0, porcentajePromocion = 0, descuento = 0;
         String email = "", contrasenia = "", seguir = "", nombre = "", nombreProducto = "", marca = "", colorProducto = "",
                 tallaProducto = "", direccionUsuario = "", rolUsuario = "", fechaPedido = "", estadoPedido = "", nombreUsuario = "",
                 nombreCategoria = "", descripcionCategoria = "", nombreProveedor = "", emailProveedor = "", direccionProveedor = "",
                 motivoDevolucion = "", estadoDevolucion = "", nombreMetodoPago = "", tipoMetodoPago = "", nombrePromocion = "",
-                descripcionPromocion = "", fechaInicioPromocion = "", fechaFinPromocion = "", estadoPromocion = "";
+                descripcionPromocion = "", fechaInicioPromocion = "", fechaFinPromocion = "", estadoPromocion = "", estadoAnterior = "";
         boolean clientesregistrados = false, correoExistente = true, verificarUsuario = false, maximoUsuario = true, maximoProducto = false,
                 productoExistente = false, pedidoRegistrado = false, categoriaRegistrada = false, proveedorRegistrado = false,
                 devolucionRegistrada = false, metodoPagoRegistrado = false, promocionRegistrada = false, productoRegistrado = false;
@@ -3907,7 +3906,7 @@ public class Main {
                                                             ==========================================
                                                             |    1) Registrar devolución             |
                                                             |    2) Buscar devolución por ID         |
-                                                            |    3) Buscar devolución porestado      |
+                                                            |    3) Buscar devolución por estado     |
                                                             |    4) Ver todas las devoluciones       |
                                                             |    5) Actualizar devolución            |
                                                             |    6) Eliminar devolución              |
@@ -3926,6 +3925,7 @@ public class Main {
                                                                         System.out.println("Ingrese el ID del pedido a devolver:");
                                                                         idPedido = sc.nextInt();
                                                                         sc.nextLine();
+                                                                        pedidoRegistrado = false;
                                                                         for (int k = 0; k < idsPedido.length; k++) {
                                                                             if (idPedido == idsPedido[k]) {
                                                                                 pedidoRegistrado = true;
@@ -3934,7 +3934,7 @@ public class Main {
                                                                             }
                                                                         }
                                                                         if (!pedidoRegistrado) {
-                                                                            System.out.println("El pedido con el " + idPedido + " no se encuentra registrado en el sistema" +
+                                                                            System.out.println("El pedido con el id " + idPedido + " no se encuentra registrado en el sistema" +
                                                                                     "\nDesea intentarlo de nuevo (s/n)");
                                                                             seguir = sc.nextLine();
                                                                             while (!seguir.equals("s") && !seguir.equals("n")) {
@@ -3947,8 +3947,9 @@ public class Main {
                                                                                 idPedidoDevolucion[j] = 0;
                                                                                 break;
                                                                             }
+                                                                        } else {
+                                                                            seguir = "n";
                                                                         }
-                                                                        pedidoRegistrado = false;
                                                                     }
                                                                     seguir = "s";
                                                                     if (idDevoluciones[j] != 0) {
@@ -3977,10 +3978,10 @@ public class Main {
                                                                     seguir = "s";
                                                                     if (idDevoluciones[j] != 0) {
                                                                         while (!seguir.equals("n")) {
-                                                                            System.out.println("Ingrese el estado de la devolución (pendiente/procesada/completada):");
+                                                                            System.out.println("Ingrese el estado de la devolución (pendiente/procesada/aprobada):");
                                                                             estadoDevolucion = sc.nextLine();
                                                                             if (estadoDevolucion.isBlank() ||
-                                                                                    (!estadoDevolucion.equals("pendiente") && !estadoDevolucion.equals("procesada") && !estadoDevolucion.equals("completada"))) {
+                                                                                    (!estadoDevolucion.equals("pendiente") && !estadoDevolucion.equals("procesada") && !estadoDevolucion.equals("aprobada"))) {
                                                                                 System.out.println("Estado inválido: Asegurese de ingresar pendiente, procesada o completada ");
                                                                                 System.out.println("Desea intentarlo de nuevo (s/n)");
                                                                                 seguir = sc.nextLine();
@@ -3997,6 +3998,30 @@ public class Main {
                                                                                 }
                                                                             } else {
                                                                                 estadoDevoluciones[j] = estadoDevolucion;
+
+                                                                                if (estadoDevolucion.equals("aprobada")) {
+                                                                                    pedido = -1;
+                                                                                    for (int k = 0; k < idsPedido.length; k++) {
+                                                                                        if (idsPedido[k] == idPedidoDevolucion[j]) {
+                                                                                            pedido = k;
+                                                                                            break;
+                                                                                        }
+                                                                                    }
+                                                                                    if (pedido != -1) {
+                                                                                        producto = -1;
+                                                                                        for (int k = 0; k < codigoProductos.length; k++) {
+                                                                                            if (idProductos[pedido] == codigoProductos[k]) {
+                                                                                                producto = k;
+                                                                                                break;
+                                                                                            }
+                                                                                        }
+                                                                                        if (producto != -1) {
+                                                                                            cantidadDevuelta = cantidadPedidos[pedido];
+                                                                                            stocksProductos[producto] += cantidadDevuelta;
+                                                                                            System.out.println("Stock actualizado: +" + cantidadDevuelta);
+                                                                                        }
+                                                                                    }
+                                                                                }
                                                                                 System.out.println("Devolución registrada con ID: " + idDevoluciones[j]);
                                                                                 seguir = "n";
                                                                             }
@@ -4255,6 +4280,33 @@ public class Main {
                                                                                                 seguir = sc.nextLine();
                                                                                             }
                                                                                         } else {
+                                                                                            estadoAnterior = estadoDevoluciones[j];
+                                                                                            pedido = -1;
+                                                                                            for (int k = 0; k < idsPedido.length; k++) {
+                                                                                                if (idsPedido[k] == idPedidoDevolucion[j]) {
+                                                                                                    pedido = k;
+                                                                                                    break;
+                                                                                                }
+                                                                                            }
+                                                                                            if (pedido != -1) {
+                                                                                                producto = -1;
+                                                                                                for (int k = 0; k < codigoProductos.length; k++) {
+                                                                                                    if (idProductos[pedido] == codigoProductos[k]) {
+                                                                                                        producto = k;
+                                                                                                        break;
+                                                                                                    }
+                                                                                                }
+                                                                                                if (producto != -1) {
+                                                                                                    cantidadDevuelta = cantidadPedidos[pedido];
+                                                                                                    if (estadoAnterior.equals("aprobada") && !estadoDevolucion.equals("aprobada")) {
+                                                                                                        stocksProductos[producto] -= cantidadDevuelta;
+                                                                                                        System.out.println("Stock actualizado: -" + cantidadDevuelta);
+                                                                                                    } else if (!estadoAnterior.equals("aprobada") && estadoDevolucion.equals("aprobada")) {
+                                                                                                        stocksProductos[producto] += cantidadDevuelta;
+                                                                                                        System.out.println("Stock actualizado: +" + cantidadDevuelta);
+                                                                                                    }
+                                                                                                }
+                                                                                            }
                                                                                             estadoDevoluciones[j] = estadoDevolucion;
                                                                                             System.out.println("Actualización exitosa.");
                                                                                             seguir = "n";
