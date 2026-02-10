@@ -2435,7 +2435,6 @@ public class Main {
                                                                                     if (estadoPromociones[k].equals("activa")) {
                                                                                         if (fechaPedidos[j].compareTo(fechaInicioPromociones[k]) >= 0 &&
                                                                                                 fechaPedidos[j].compareTo(fechaFinPromociones[k]) <= 0) {
-                                                                                            // Buscar categoría del producto
                                                                                             for (int m = 0; m < codigoProductos.length; m++) {
                                                                                                 if (idProductos[j] == codigoProductos[m]) {
                                                                                                     if (categoriaPromociones[k] == categoriaProductos[m]) {
