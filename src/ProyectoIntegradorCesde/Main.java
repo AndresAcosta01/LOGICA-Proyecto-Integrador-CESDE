@@ -1429,8 +1429,6 @@ public class Main {
                                                                                 }
                                                                             }
                                                                         }
-
-                                                                        // NUEVA SECCIÓN: Pedir ID de Proveedor
                                                                         seguir = "s";
                                                                         if (categoriaProductos[j] != 0) {
                                                                             while (!seguir.equals("n")) {
@@ -1458,7 +1456,6 @@ public class Main {
                                                                                         System.out.println("Se ha cancelado el proceso de registro");
                                                                                     }
                                                                                 } else {
-                                                                                    // Validar que el proveedor exista
                                                                                     for (int k = 0; k < idProveedores.length; k++) {
                                                                                         if (idProveedor == idProveedores[k]) {
                                                                                             proveedorRegistrado = true;
@@ -1779,9 +1776,26 @@ public class Main {
                                                                                                 seguir = sc.nextLine();
                                                                                             }
                                                                                         } else {
-                                                                                            codigoProductos[j] = codigoProducto;
-                                                                                            System.out.println("Actualizacion exitosa");
-                                                                                            seguir = "n";
+                                                                                            for (int k = 0; k < codigoProductos.length; k++) {
+                                                                                                if (k != j && codigoProducto == codigoProductos[k]) {
+                                                                                                    productoExistente = true;
+                                                                                                    System.out.println("El codigo " + codigoProducto + " ya esta registrado en otro producto" +
+                                                                                                            "\nDesea ingresarlo de nuevo (s/n)");
+                                                                                                    seguir = sc.nextLine();
+                                                                                                    while (!seguir.equals("s") && !seguir.equals("n")) {
+                                                                                                        System.out.println("Opcion invalida: Asegurese de ingresar 's' o 'n' en minuscula");
+                                                                                                        System.out.println("Desea ingresarlo de nuevo (s/n)");
+                                                                                                        seguir = sc.nextLine();
+                                                                                                    }
+                                                                                                    break;
+                                                                                                }
+                                                                                            }
+                                                                                            if (!productoExistente) {
+                                                                                                codigoProductos[j] = codigoProducto;
+                                                                                                System.out.println("Actualizacion exitosa");
+                                                                                                seguir = "n";
+                                                                                            }
+                                                                                            productoExistente = false;
                                                                                         }
                                                                                     }
                                                                                     seguir = "s";
