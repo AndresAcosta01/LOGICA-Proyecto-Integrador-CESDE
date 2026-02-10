@@ -3636,7 +3636,7 @@ public class Main {
                                                                             "\nNombre: " + nombreProveedores[j] +
                                                                             "\nCorreo: " + emailProveedores[j] +
                                                                             "\nTelefono: " + telefonoProveedores[j] +
-                                                                            "\nDireccion" + direccionProveedores[j]);
+                                                                            "\nDireccion: " + direccionProveedores[j]);
                                                                 }
                                                             }
                                                             if (!proveedorRegistrado) {
