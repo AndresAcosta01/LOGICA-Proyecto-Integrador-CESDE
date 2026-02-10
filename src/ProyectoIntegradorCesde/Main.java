@@ -6,56 +6,56 @@ public class Main {
     public static void main(String[] args) {
 
         //Variables
-        int u = 100, p = 100, pv = 100, mp = 100, pm = 100;
+        int n =100;
         Scanner sc = new Scanner(System.in);
-        String[] nombresUsuarios = new String[u];
-        String[] emailsUsuarios = new String[u];
-        String[] contraseniasUsuarios = new String[u];
-        String[] rolesUsuarios = new String[u];
-        String[] nombreProductos = new String[u];
-        String[] coloresProductos = new String[u];
-        String[] marcasProductos = new String[u];
-        String[] tallasProductos = new String[u];
-        String[] emailProveedores = new String[u];
-        String[] direccionProveedores = new String[u];
-        String[] nombreCategorias = new String[p];
-        String[] descripcionCategorias = new String[p];
-        String[] estadoPedidos = new String[p];
-        String[] fechaPedidos = new String[p];
-        String[] nombreProveedores = new String[pv];
-        String[] direccionUsuarios = new String[u];
-        String[] emailsPedidos = new String[u];
-        String[] motivosDevoluciones = new String[u];
-        String[] estadoDevoluciones = new String[u];
-        String[] nombreMetodosPagos = new String[u];
-        String[] tipoMetodosPagos = new String[u];
-        String[] nombrePromociones = new String[u];
-        String[] descripcionPromociones = new String[u];
-        String[] fechaInicioPromociones = new String[u];
-        String[] fechaFinPromociones = new String[u];
-        String[] estadoPromociones = new String[u];
-        int[] idPromocionesPedidos = new int[u];
-        int[] idProductos = new int[u];
-        int[] idsMetodosPedidos = new int[u];
-        int[] proveedorProductos = new int[u];
-        int[] categoriaPromociones = new int[u];
-        int[] categoriaProductos = new int[u];
-        int[] stocksProductos = new int[u];
-        int[] codigoProductos = new int[u];
-        int[] idsPedido = new int[p];
-        int[] idPromociones = new int[p];
-        int[] idPedidoDevolucion = new int[p];
-        int[] idProveedores = new int[pv];
-        int[] idMetodosPagos = new int[p];
-        long[] telefonoProveedores = new long[pv];
-        int[] idDevoluciones = new int[pv];
-        int[] idCategorias = new int[pv];
-        long[] celularUsuarios = new long[u];
-        int[] cantidadPedidos = new int[u];
-        long[] numeroCuentas = new long[u];
-        double[] precioProductos = new double[u];
-        double[] totalPedidos = new double[pv];
-        double[] porcentajePromociones = new double[u];
+        String[] nombresUsuarios = new String[n];
+        String[] emailsUsuarios = new String[n];
+        String[] contraseniasUsuarios = new String[n];
+        String[] rolesUsuarios = new String[n];
+        String[] nombreProductos = new String[n];
+        String[] coloresProductos = new String[n];
+        String[] marcasProductos = new String[n];
+        String[] tallasProductos = new String[n];
+        String[] emailProveedores = new String[n];
+        String[] direccionProveedores = new String[n];
+        String[] nombreCategorias = new String[n];
+        String[] descripcionCategorias = new String[n];
+        String[] estadoPedidos = new String[n];
+        String[] fechaPedidos = new String[n];
+        String[] nombreProveedores = new String[n];
+        String[] direccionUsuarios = new String[n];
+        String[] emailsPedidos = new String[n];
+        String[] motivosDevoluciones = new String[n];
+        String[] estadoDevoluciones = new String[n];
+        String[] nombreMetodosPagos = new String[n];
+        String[] tipoMetodosPagos = new String[n];
+        String[] nombrePromociones = new String[n];
+        String[] descripcionPromociones = new String[n];
+        String[] fechaInicioPromociones = new String[n];
+        String[] fechaFinPromociones = new String[n];
+        String[] estadoPromociones = new String[n];
+        int[] idPromocionesPedidos = new int[n];
+        int[] idProductos = new int[n];
+        int[] idsMetodosPedidos = new int[n];
+        int[] proveedorProductos = new int[n];
+        int[] categoriaPromociones = new int[n];
+        int[] categoriaProductos = new int[n];
+        int[] stocksProductos = new int[n];
+        int[] codigoProductos = new int[n];
+        int[] idsPedido = new int[n];
+        int[] idPromociones = new int[n];
+        int[] idPedidoDevolucion = new int[n];
+        int[] idProveedores = new int[n];
+        int[] idMetodosPagos = new int[n];
+        long[] telefonoProveedores = new long[n];
+        int[] idDevoluciones = new int[n];
+        int[] idCategorias = new int[n];
+        long[] celularUsuarios = new long[n];
+        int[] cantidadPedidos = new int[n];
+        long[] numeroCuentas = new long[n];
+        double[] precioProductos = new double[n];
+        double[] totalPedidos = new double[n];
+        double[] porcentajePromociones = new double[n];
         int tipoUsuario = 0, admin = 0, adminClientes = 0, actualizarCliente = 0, adminProductos = 0,
                 actualizarProducto = 0, codigoProducto = 0, stockProducto = 0, idPedido = 0, stockDisponible = 0,
                 cantidadPedido = 0, adminPedido = 0, diferenciaCantidades = 0, cantidadAnterior = 0, opcionEstado = 0, adminCategoria = 0,
@@ -68,7 +68,7 @@ public class Main {
                 tallaProducto = "", direccionUsuario = "", rolUsuario = "", fechaPedido = "", estadoPedido = "", nombreUsuario = "",
                 nombreCategoria = "", descripcionCategoria = "", nombreProveedor = "", emailProveedor = "", direccionProveedor = "",
                 motivoDevolucion = "", estadoDevolucion = "", nombreMetodoPago = "", tipoMetodoPago = "", nombrePromocion = "",
-                descripcionPromocion = "", fechaInicioPromocion = "", fechaFinPromocion = "", estadoPromocion = "", categoriaPromocion = "";
+                descripcionPromocion = "", fechaInicioPromocion = "", fechaFinPromocion = "", estadoPromocion = "";
         boolean clientesregistrados = false, correoExistente = true, verificarUsuario = false, maximoUsuario = true, maximoProducto = false,
                 productoExistente = false, pedidoRegistrado = false, categoriaRegistrada = false, proveedorRegistrado = false,
                 devolucionRegistrada = false, metodoPagoRegistrado = false, promocionRegistrada = false, productoRegistrado = false;
