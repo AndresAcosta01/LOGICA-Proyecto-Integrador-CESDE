@@ -108,6 +108,13 @@ public class Main {
         direccionUsuarios[4] = "Transversal 20 #30-40";
         celularUsuarios[4] = 3045678901L;
 
+        nombresUsuarios[5] = "Andres";
+        emailsUsuarios[5] = "andres@gmail.com";
+        contraseniasUsuarios[5] = "123";
+        rolesUsuarios[5] = "admin";
+        direccionUsuarios[5] = "Calle 1 #10-20";
+        celularUsuarios[5] = 3001234667L;
+
         idCategorias[0] = 1;
         nombreCategorias[0] = "Camisas";
         descripcionCategorias[0] = "Camisas casuales y formales para toda ocasión";
@@ -2439,7 +2446,7 @@ public class Main {
                                                                                                     if (categoriaPromociones[k] == categoriaProductos[m]) {
                                                                                                         descuento = totalPedidos[j] * (porcentajePromociones[k] / 100.0);
                                                                                                         totalPedidos[j] -= descuento;
-                                                                                                        System.out.println("Promoción aplicada: -" + porcentajePromociones[k] + "%" +
+                                                                                                        System.out.println("Promoción aplicada: " + porcentajePromociones[k] + "%" +
                                                                                                                 "\nNuevo total: $" + totalPedidos[j]);
                                                                                                         idPromocionesPedidos[j] = idPromociones[k];
                                                                                                         break;
@@ -2790,7 +2797,8 @@ public class Main {
                                                                                     ==================================
                                                                                     |   1) Estado del pedido         |
                                                                                     |   2) Cantidad                  |
-                                                                                    |   3) Actualizar otro pedido    |
+                                                                                    |   3) Fecha del pedido          |
+                                                                                    |   4) Actualizar otro pedido    |
                                                                                     |   0) Atras                     |
                                                                                     ==================================
                                                                                     """);
@@ -2900,6 +2908,58 @@ public class Main {
                                                                                     seguir = "s";
                                                                                     break;
                                                                                 case 3:
+                                                                                    while (!seguir.equals("n")) {
+                                                                                        System.out.println("La fecha actual del pedido es: " + fechaPedidos[j] +
+                                                                                                "\nIngrese la nueva fecha (AAAA/MM/DD):");
+                                                                                        fechaPedido = sc.nextLine();
+                                                                                        if (fechaPedido.isBlank()) {
+                                                                                            System.out.println("La fecha no puede estar vacia" +
+                                                                                                    "\nDesea ingresarla de nuevo (s/n)");
+                                                                                            seguir = sc.nextLine();
+                                                                                            while (!seguir.equals("s") && !seguir.equals("n")) {
+                                                                                                System.out.println("Opcion invalida: Asegurese de ingresar 's' o 'n' en minuscula");
+                                                                                                System.out.println("Desea ingresarla de nuevo (s/n)");
+                                                                                                seguir = sc.nextLine();
+                                                                                            }
+                                                                                        } else {
+                                                                                            fechaPedidos[j] = fechaPedido;
+                                                                                            int indiceProducto = -1;
+                                                                                            for (int k = 0; k < codigoProductos.length; k++) {
+                                                                                                if (idProductos[j] == codigoProductos[k]) {
+                                                                                                    indiceProducto = k;
+                                                                                                    break;
+                                                                                                }
+                                                                                            }
+                                                                                            if (indiceProducto != -1) {
+                                                                                                precioUnitario = precioProductos[indiceProducto];
+                                                                                                totalPedidos[j] = cantidadPedidos[j] * precioUnitario;
+                                                                                                idPromocionesPedidos[j] = 0;
+                                                                                                for (int k = 0; k < idPromociones.length; k++) {
+                                                                                                    if (idPromociones[k] != 0) {
+                                                                                                        if (estadoPromociones[k].equals("activa")) {
+                                                                                                            if (fechaPedidos[j].compareTo(fechaInicioPromociones[k]) >= 0 &&
+                                                                                                                    fechaPedidos[j].compareTo(fechaFinPromociones[k]) <= 0) {
+                                                                                                                if (categoriaPromociones[k] == categoriaProductos[indiceProducto]) {
+                                                                                                                    descuento = totalPedidos[j] * (porcentajePromociones[k] / 100.0);
+                                                                                                                    totalPedidos[j] -= descuento;
+                                                                                                                    System.out.println("Promoción aplicada: -" + porcentajePromociones[k] + "%" +
+                                                                                                                            "\nNuevo total: $" + totalPedidos[j]);
+                                                                                                                    idPromocionesPedidos[j] = idPromociones[k];
+                                                                                                                    break;
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                            System.out.println("Actualizacion exitosa");
+                                                                                            System.out.println("Nuevo total a pagar: $" + totalPedidos[j]);
+                                                                                            seguir = "n";
+                                                                                        }
+                                                                                    }
+                                                                                    seguir = "s";
+                                                                                    break;
+                                                                                case 4:
                                                                                     for (int k = 0; k < idsPedido.length; k++) {
                                                                                         if (idsPedido[k] != 0) {
                                                                                             pedidoRegistrado = true;
@@ -3920,44 +3980,34 @@ public class Main {
                                                         case 1:
                                                             for (int j = 0; j < idDevoluciones.length; j++) {
                                                                 if (idDevoluciones[j] == 0) {
-                                                                    idDevoluciones[j] = j + 1;
-                                                                    while (!seguir.equals("n")) {
-                                                                        System.out.println("Ingrese el ID del pedido a devolver:");
-                                                                        idPedido = sc.nextInt();
-                                                                        sc.nextLine();
-                                                                        pedidoRegistrado = false;
-                                                                        for (int k = 0; k < idsPedido.length; k++) {
-                                                                            if (idPedido == idsPedido[k]) {
-                                                                                pedidoRegistrado = true;
-                                                                                idPedidoDevolucion[j] = idPedido;
-                                                                                break;
-                                                                            }
-                                                                        }
-                                                                        if (!pedidoRegistrado) {
-                                                                            System.out.println("El pedido con el id " + idPedido + " no se encuentra registrado en el sistema" +
-                                                                                    "\nDesea intentarlo de nuevo (s/n)");
-                                                                            seguir = sc.nextLine();
-                                                                            while (!seguir.equals("s") && !seguir.equals("n")) {
-                                                                                System.out.println("Opcion invalida: Asegurese de ingresar 's' o 'n' en minuscula");
-                                                                                System.out.println("Desea ingresarlo de nuevo (s/n)");
-                                                                                seguir = sc.nextLine();
-                                                                            }
-                                                                            if (!seguir.equals("s")) {
-                                                                                idDevoluciones[j] = 0;
-                                                                                idPedidoDevolucion[j] = 0;
-                                                                                break;
-                                                                            }
-                                                                        } else {
-                                                                            seguir = "n";
-                                                                        }
-                                                                    }
                                                                     seguir = "s";
-                                                                    if (idDevoluciones[j] != 0) {
+                                                                    break;
+                                                                } else {
+                                                                    seguir = "n";
+                                                                }
+                                                            }
+                                                            if (seguir.equals("n")) {
+                                                                System.out.println("Se han registrado el maximo de devoluciones");
+                                                            }
+                                                            while (!seguir.equals("n")) {
+                                                                for (int j = 0; j < idDevoluciones.length; j++) {
+                                                                    if (idDevoluciones[j] == 0) {
+                                                                        idDevoluciones[j] = j + 1;
+                                                                        seguir = "s";
                                                                         while (!seguir.equals("n")) {
-                                                                            System.out.println("Ingrese el motivo de la devolución:");
-                                                                            motivoDevolucion = sc.nextLine();
-                                                                            if (motivoDevolucion.isBlank()) {
-                                                                                System.out.println("El motivo no puede estar vacío. ¿Desea ingresarlo nuevamente? (s/n)");
+                                                                            System.out.println("Ingrese el ID del pedido a devolver:");
+                                                                            idPedido = sc.nextInt();
+                                                                            sc.nextLine();
+                                                                            pedidoRegistrado = false;
+                                                                            for (int k = 0; k < idsPedido.length; k++) {
+                                                                                if (idPedido == idsPedido[k]) {
+                                                                                    pedidoRegistrado = true;
+                                                                                    break;
+                                                                                }
+                                                                            }
+                                                                            if (!pedidoRegistrado) {
+                                                                                System.out.println("El pedido con el id " + idPedido + " no se encuentra registrado en el sistema" +
+                                                                                        "\nDesea intentarlo de nuevo (s/n)");
                                                                                 seguir = sc.nextLine();
                                                                                 while (!seguir.equals("s") && !seguir.equals("n")) {
                                                                                     System.out.println("Opcion invalida: Asegurese de ingresar 's' o 'n' en minuscula");
@@ -3970,65 +4020,128 @@ public class Main {
                                                                                     break;
                                                                                 }
                                                                             } else {
-                                                                                motivosDevoluciones[j] = motivoDevolucion;
-                                                                                seguir = "n";
+                                                                                devolucionRegistrada = false;
+                                                                                for (int k = 0; k < idPedidoDevolucion.length; k++) {
+                                                                                    if (idPedido == idPedidoDevolucion[k]) {
+                                                                                        devolucionRegistrada = true;
+                                                                                        System.out.println("El pedido con ID " + idPedido + " ya tiene una devolución registrada" +
+                                                                                                "\nDesea ingresar otro pedido (s/n)");
+                                                                                        seguir = sc.nextLine();
+                                                                                        while (!seguir.equals("s") && !seguir.equals("n")) {
+                                                                                            System.out.println("Opcion invalida: Asegurese de ingresar 's' o 'n' en minuscula");
+                                                                                            System.out.println("Desea ingresar otro pedido (s/n)");
+                                                                                            seguir = sc.nextLine();
+                                                                                        }
+                                                                                        if (!seguir.equals("s")) {
+                                                                                            idDevoluciones[j] = 0;
+                                                                                            idPedidoDevolucion[j] = 0;
+                                                                                        }
+                                                                                        break;
+                                                                                    }
+                                                                                }
+                                                                                if (!devolucionRegistrada) {
+                                                                                    idPedidoDevolucion[j] = idPedido;
+                                                                                    seguir = "n";
+                                                                                }
                                                                             }
                                                                         }
-                                                                    }
-                                                                    seguir = "s";
-                                                                    if (idDevoluciones[j] != 0) {
-                                                                        while (!seguir.equals("n")) {
-                                                                            System.out.println("Ingrese el estado de la devolución (pendiente/procesada/aprobada):");
-                                                                            estadoDevolucion = sc.nextLine();
-                                                                            if (estadoDevolucion.isBlank() ||
-                                                                                    (!estadoDevolucion.equals("pendiente") && !estadoDevolucion.equals("procesada") && !estadoDevolucion.equals("aprobada"))) {
-                                                                                System.out.println("Estado inválido: Asegurese de ingresar pendiente, procesada o completada ");
-                                                                                System.out.println("Desea intentarlo de nuevo (s/n)");
-                                                                                seguir = sc.nextLine();
-                                                                                while (!seguir.equals("s") && !seguir.equals("n")) {
-                                                                                    System.out.println("Opcion invalida: Asegurese de ingresar 's' o 'n' en minuscula");
-                                                                                    System.out.println("¿Desea intentarlo de nuevo? (s/n)");
+                                                                        seguir = "s";
+                                                                        if (idDevoluciones[j] != 0 && idPedidoDevolucion[j] != 0) {
+                                                                            while (!seguir.equals("n")) {
+                                                                                System.out.println("Ingrese el motivo de la devolución:");
+                                                                                motivoDevolucion = sc.nextLine();
+                                                                                if (motivoDevolucion.isBlank()) {
+                                                                                    System.out.println("El motivo no puede estar vacío. ¿Desea ingresarlo nuevamente? (s/n)");
                                                                                     seguir = sc.nextLine();
-                                                                                }
-                                                                                if (!seguir.equals("s")) {
-                                                                                    idDevoluciones[j] = 0;
-                                                                                    idPedidoDevolucion[j] = 0;
-                                                                                    motivosDevoluciones[j] = null;
-                                                                                    break;
-                                                                                }
-                                                                            } else {
-                                                                                estadoDevoluciones[j] = estadoDevolucion;
-
-                                                                                if (estadoDevolucion.equals("aprobada")) {
-                                                                                    pedido = -1;
-                                                                                    for (int k = 0; k < idsPedido.length; k++) {
-                                                                                        if (idsPedido[k] == idPedidoDevolucion[j]) {
-                                                                                            pedido = k;
-                                                                                            break;
-                                                                                        }
+                                                                                    while (!seguir.equals("s") && !seguir.equals("n")) {
+                                                                                        System.out.println("Opcion invalida: Asegurese de ingresar 's' o 'n' en minuscula");
+                                                                                        System.out.println("Desea ingresarlo de nuevo (s/n)");
+                                                                                        seguir = sc.nextLine();
                                                                                     }
-                                                                                    if (pedido != -1) {
-                                                                                        producto = -1;
-                                                                                        for (int k = 0; k < codigoProductos.length; k++) {
-                                                                                            if (idProductos[pedido] == codigoProductos[k]) {
-                                                                                                producto = k;
+                                                                                    if (!seguir.equals("s")) {
+                                                                                        idDevoluciones[j] = 0;
+                                                                                        idPedidoDevolucion[j] = 0;
+                                                                                        break;
+                                                                                    }
+                                                                                } else {
+                                                                                    motivosDevoluciones[j] = motivoDevolucion;
+                                                                                    seguir = "n";
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        seguir = "s";
+                                                                        if (idDevoluciones[j] != 0 && motivosDevoluciones[j] != null) {
+                                                                            while (!seguir.equals("n")) {
+                                                                                System.out.println("Ingrese el estado de la devolución (pendiente/procesada/aprobada):");
+                                                                                estadoDevolucion = sc.nextLine();
+                                                                                if (estadoDevolucion.isBlank() ||
+                                                                                        (!estadoDevolucion.equals("pendiente") && !estadoDevolucion.equals("procesada") && !estadoDevolucion.equals("aprobada"))) {
+                                                                                    System.out.println("Estado inválido: Asegurese de ingresar pendiente, procesada o aprobada");
+                                                                                    System.out.println("Desea intentarlo de nuevo (s/n)");
+                                                                                    seguir = sc.nextLine();
+                                                                                    while (!seguir.equals("s") && !seguir.equals("n")) {
+                                                                                        System.out.println("Opcion invalida: Asegurese de ingresar 's' o 'n' en minuscula");
+                                                                                        System.out.println("Desea intentarlo de nuevo (s/n)");
+                                                                                        seguir = sc.nextLine();
+                                                                                    }
+                                                                                    if (!seguir.equals("s")) {
+                                                                                        idDevoluciones[j] = 0;
+                                                                                        idPedidoDevolucion[j] = 0;
+                                                                                        motivosDevoluciones[j] = null;
+                                                                                        break;
+                                                                                    }
+                                                                                } else {
+                                                                                    estadoDevoluciones[j] = estadoDevolucion;
+
+                                                                                    if (estadoDevolucion.equals("aprobada")) {
+                                                                                        pedido = -1;
+                                                                                        for (int k = 0; k < idsPedido.length; k++) {
+                                                                                            if (idsPedido[k] == idPedidoDevolucion[j]) {
+                                                                                                pedido = k;
                                                                                                 break;
                                                                                             }
                                                                                         }
-                                                                                        if (producto != -1) {
-                                                                                            cantidadDevuelta = cantidadPedidos[pedido];
-                                                                                            stocksProductos[producto] += cantidadDevuelta;
-                                                                                            System.out.println("Stock actualizado: +" + cantidadDevuelta);
+                                                                                        if (pedido != -1) {
+                                                                                            producto = -1;
+                                                                                            for (int k = 0; k < codigoProductos.length; k++) {
+                                                                                                if (idProductos[pedido] == codigoProductos[k]) {
+                                                                                                    producto = k;
+                                                                                                    break;
+                                                                                                }
+                                                                                            }
+                                                                                            if (producto != -1) {
+                                                                                                cantidadDevuelta = cantidadPedidos[pedido];
+                                                                                                stocksProductos[producto] += cantidadDevuelta;
+                                                                                                System.out.println("Stock actualizado: +" + cantidadDevuelta);
+                                                                                            }
                                                                                         }
                                                                                     }
+                                                                                    System.out.println("Devolución registrada con ID: " + idDevoluciones[j]);
+                                                                                    seguir = "n";
                                                                                 }
-                                                                                System.out.println("Devolución registrada con ID: " + idDevoluciones[j]);
-                                                                                seguir = "n";
                                                                             }
                                                                         }
+                                                                        break;
                                                                     }
-                                                                    break;
                                                                 }
+                                                                for (int j = 0; j < idDevoluciones.length; j++) {
+                                                                    if (idDevoluciones[j] == 0) {
+                                                                        System.out.println("Desea registrar otra devolución (s/n)");
+                                                                        seguir = sc.nextLine();
+                                                                        maximoUsuario = false;
+                                                                        while (!seguir.equals("s") && !seguir.equals("n")) {
+                                                                            System.out.println("Opción invalida, vuelva a ingresarla");
+                                                                            System.out.println("Desea registrar otra devolución (s/n)");
+                                                                            seguir = sc.nextLine();
+                                                                        }
+                                                                        break;
+                                                                    }
+                                                                }
+                                                                if (maximoUsuario) {
+                                                                    System.out.println("Se han registrado el máximo de devoluciones");
+                                                                    seguir = "n";
+                                                                }
+                                                                maximoUsuario = true;
                                                             }
                                                             seguir = "s";
                                                             break;
@@ -4499,6 +4612,7 @@ public class Main {
                                                                     if (idMetodosPagos[j] == 0) {
                                                                         idMetodoPago = j + 1;
                                                                         idMetodosPagos[j] = idMetodoPago;
+                                                                        seguir = "s";
                                                                         while (!seguir.equals("n")) {
                                                                             System.out.println("Nombre del método de pago:");
                                                                             nombreMetodoPago = sc.nextLine();
@@ -4521,7 +4635,7 @@ public class Main {
                                                                             }
                                                                         }
                                                                         seguir = "s";
-                                                                        if (idMetodosPagos[j] != 0) {
+                                                                        if (nombreMetodosPagos[j] != null) {
                                                                             while (!seguir.equals("n")) {
                                                                                 System.out.println("Tipo de método de pago (ahorro/corriente):");
                                                                                 tipoMetodoPago = sc.nextLine();
@@ -4537,9 +4651,10 @@ public class Main {
                                                                                     if (!seguir.equals("s")) {
                                                                                         idMetodosPagos[j] = 0;
                                                                                         nombreMetodosPagos[j] = null;
+                                                                                        break;
                                                                                     }
                                                                                 } else if (!tipoMetodoPago.equals("ahorro") && !tipoMetodoPago.equals("corriente")) {
-                                                                                    System.out.println("Tipo invalido: Asegurese de escribir debito o credito en miniscula" +
+                                                                                    System.out.println("Tipo invalido: Asegurese de escribir ahorro o corriente en minuscula" +
                                                                                             "\nDesea ingresarlo de nuevo (s/n)");
                                                                                     seguir = sc.nextLine();
                                                                                     while (!seguir.equals("s") && !seguir.equals("n")) {
@@ -4550,6 +4665,7 @@ public class Main {
                                                                                     if (!seguir.equals("s")) {
                                                                                         idMetodosPagos[j] = 0;
                                                                                         nombreMetodosPagos[j] = null;
+                                                                                        break;
                                                                                     }
                                                                                 } else {
                                                                                     tipoMetodosPagos[j] = tipoMetodoPago;
@@ -4562,6 +4678,7 @@ public class Main {
                                                                             while (!seguir.equals("n")) {
                                                                                 System.out.println("Número de cuenta:");
                                                                                 numeroCuenta = sc.nextLong();
+                                                                                sc.nextLine();
                                                                                 if (numeroCuenta == 0) {
                                                                                     System.out.println("El número de cuenta no puede ser cero" +
                                                                                             "\nDesea ingresarlo de nuevo (s/n)");
@@ -4575,6 +4692,7 @@ public class Main {
                                                                                         idMetodosPagos[j] = 0;
                                                                                         nombreMetodosPagos[j] = null;
                                                                                         tipoMetodosPagos[j] = null;
+                                                                                        break;
                                                                                     }
                                                                                 } else {
                                                                                     numeroCuentas[j] = numeroCuenta;
@@ -4721,7 +4839,7 @@ public class Main {
                                                                                 case 2:
                                                                                     while (!seguir.equals("n")) {
                                                                                         System.out.println("El tipo actual es: " + tipoMetodosPagos[j] +
-                                                                                                "\nIngrese el nuevo tipo (debito/credito):");
+                                                                                                "\nIngrese el nuevo tipo (ahorro/corriente):");
                                                                                         tipoMetodoPago = sc.nextLine();
                                                                                         if (tipoMetodoPago.isBlank()) {
                                                                                             System.out.println("El tipo no puede estar vacio" +
@@ -4732,8 +4850,8 @@ public class Main {
                                                                                                 System.out.println("Desea intentarlo de nuevo (s/n)");
                                                                                                 seguir = sc.nextLine();
                                                                                             }
-                                                                                        } else if (!tipoMetodoPago.equals("debito") && !tipoMetodoPago.equals("credito")) {
-                                                                                            System.out.println("Tipo invalido: Asegurese de escribir debito o credito" +
+                                                                                        } else if (!tipoMetodoPago.equals("ahorro") && !tipoMetodoPago.equals("corriente")) {
+                                                                                            System.out.println("Tipo invalido: Asegurese de escribir ahorro o corriente en minuscula" +
                                                                                                     "\nDesea intentarlo de nuevo (s/n)");
                                                                                             seguir = sc.nextLine();
                                                                                             while (!seguir.equals("s") && !seguir.equals("n")) {
@@ -4962,7 +5080,7 @@ public class Main {
                                                                             }
                                                                         }
                                                                         seguir = "s";
-                                                                        if (idPromociones[j] != 0) {
+                                                                        if (nombrePromociones[j] != null) {
                                                                             while (!seguir.equals("n")) {
                                                                                 System.out.println("Descripción de la promoción:");
                                                                                 descripcionPromocion = sc.nextLine();
@@ -4978,6 +5096,7 @@ public class Main {
                                                                                     if (!seguir.equals("s")) {
                                                                                         idPromociones[j] = 0;
                                                                                         nombrePromociones[j] = null;
+                                                                                        break;
                                                                                     }
                                                                                 } else {
                                                                                     descripcionPromociones[j] = descripcionPromocion;
@@ -5004,6 +5123,7 @@ public class Main {
                                                                                         idPromociones[j] = 0;
                                                                                         nombrePromociones[j] = null;
                                                                                         descripcionPromociones[j] = null;
+                                                                                        break;
                                                                                     }
                                                                                 } else {
                                                                                     porcentajePromociones[j] = porcentajePromocion;
@@ -5014,7 +5134,7 @@ public class Main {
                                                                         seguir = "s";
                                                                         if (porcentajePromociones[j] != 0) {
                                                                             while (!seguir.equals("n")) {
-                                                                                System.out.println("Fecha de inicio (DD/MM/AAAA):");
+                                                                                System.out.println("Fecha de inicio (AAAA/MM/DD):");
                                                                                 fechaInicioPromocion = sc.nextLine();
                                                                                 if (fechaInicioPromocion.isBlank()) {
                                                                                     System.out.println("La fecha de inicio no puede estar vacia" +
@@ -5030,6 +5150,7 @@ public class Main {
                                                                                         porcentajePromociones[j] = 0;
                                                                                         nombrePromociones[j] = null;
                                                                                         descripcionPromociones[j] = null;
+                                                                                        break;
                                                                                     }
                                                                                 } else {
                                                                                     fechaInicioPromociones[j] = fechaInicioPromocion;
@@ -5040,7 +5161,7 @@ public class Main {
                                                                         seguir = "s";
                                                                         if (fechaInicioPromociones[j] != null) {
                                                                             while (!seguir.equals("n")) {
-                                                                                System.out.println("Fecha de fin (DD/MM/AAAA):");
+                                                                                System.out.println("Fecha de fin (AAAA/MM/DD):");
                                                                                 fechaFinPromocion = sc.nextLine();
                                                                                 if (fechaFinPromocion.isBlank()) {
                                                                                     System.out.println("La fecha de fin no puede estar vacia" +
@@ -5057,6 +5178,7 @@ public class Main {
                                                                                         nombrePromociones[j] = null;
                                                                                         descripcionPromociones[j] = null;
                                                                                         fechaInicioPromociones[j] = null;
+                                                                                        break;
                                                                                     }
                                                                                 } else {
                                                                                     fechaFinPromociones[j] = fechaFinPromocion;
@@ -5085,6 +5207,7 @@ public class Main {
                                                                                         descripcionPromociones[j] = null;
                                                                                         fechaInicioPromociones[j] = null;
                                                                                         fechaFinPromociones[j] = null;
+                                                                                        break;
                                                                                     }
                                                                                 } else if (!estadoPromocion.equals("activa") && !estadoPromocion.equals("inactiva")) {
                                                                                     System.out.println("Estado invalido: Asegurese de escribir activa o inactiva" +
@@ -5102,6 +5225,7 @@ public class Main {
                                                                                         descripcionPromociones[j] = null;
                                                                                         fechaInicioPromociones[j] = null;
                                                                                         fechaFinPromociones[j] = null;
+                                                                                        break;
                                                                                     }
                                                                                 } else {
                                                                                     estadoPromociones[j] = estadoPromocion;
@@ -5126,21 +5250,19 @@ public class Main {
                                                                                     }
                                                                                     if (!seguir.equals("s")) {
                                                                                         idPromociones[j] = 0;
-
                                                                                         porcentajePromociones[j] = 0;
                                                                                         nombrePromociones[j] = null;
                                                                                         descripcionPromociones[j] = null;
                                                                                         fechaInicioPromociones[j] = null;
                                                                                         fechaFinPromociones[j] = null;
                                                                                         estadoPromociones[j] = null;
+                                                                                        break;
                                                                                     }
                                                                                 } else {
+                                                                                    categoriaRegistrada = false;
                                                                                     for (int k = 0; k < idCategorias.length; k++) {
                                                                                         if (idCategoria == idCategorias[k]) {
                                                                                             categoriaRegistrada = true;
-                                                                                            categoriaPromociones[j] = idCategoria;
-                                                                                            nombreCategoria = nombreCategorias[k];
-                                                                                            seguir = "n";
                                                                                             break;
                                                                                         }
                                                                                     }
@@ -5161,14 +5283,41 @@ public class Main {
                                                                                             fechaInicioPromociones[j] = null;
                                                                                             fechaFinPromociones[j] = null;
                                                                                             estadoPromociones[j] = null;
+                                                                                            break;
+                                                                                        }
+                                                                                    } else {
+                                                                                        promocionRegistrada = false;
+                                                                                        for (int k = 0; k < categoriaPromociones.length; k++) {
+                                                                                            if (idCategoria == categoriaPromociones[k] && estadoPromociones[k] != null && estadoPromociones[k].equals("activa")) {
+                                                                                                promocionRegistrada = true;
+                                                                                                System.out.println("La categoría con ID " + idCategoria + " ya tiene una promoción activa registrada" +
+                                                                                                        "\nDesea ingresar otra categoría (s/n)");
+                                                                                                seguir = sc.nextLine();
+                                                                                                while (!seguir.equals("s") && !seguir.equals("n")) {
+                                                                                                    System.out.println("Opcion invalida: Asegurese de ingresar 's' o 'n' en minuscula");
+                                                                                                    System.out.println("Desea ingresar otra categoría (s/n)");
+                                                                                                    seguir = sc.nextLine();
+                                                                                                }
+                                                                                                if (!seguir.equals("s")) {
+                                                                                                    idPromociones[j] = 0;
+                                                                                                    porcentajePromociones[j] = 0;
+                                                                                                    nombrePromociones[j] = null;
+                                                                                                    descripcionPromociones[j] = null;
+                                                                                                    fechaInicioPromociones[j] = null;
+                                                                                                    fechaFinPromociones[j] = null;
+                                                                                                    estadoPromociones[j] = null;
+                                                                                                }
+                                                                                                break;
+                                                                                            }
+                                                                                        }
+                                                                                        if (!promocionRegistrada) {
+                                                                                            categoriaPromociones[j] = idCategoria;
+                                                                                            System.out.println("\nCreacion Exitosa con ID: " + idPromociones[j]);
+                                                                                            seguir = "n";
                                                                                         }
                                                                                     }
-                                                                                    categoriaRegistrada = false;
                                                                                 }
                                                                             }
-                                                                        }
-                                                                        if (idCategorias[j] != 0) {
-                                                                            System.out.println("\nCreacion Exitosa con ID: " + idPromociones[j]);
                                                                         }
                                                                         break;
                                                                     }
